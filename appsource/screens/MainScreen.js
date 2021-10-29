@@ -17,7 +17,7 @@ const MainScreen = (props) => {
                 </Flex>
             </ScrollView>
             
-            <AddComputer style={{backgroundColor: 'white', padding: 20, margin: 15}} ref={AddComputerModalReference}></AddComputer>
+            <AddComputer ref={AddComputerModalReference}></AddComputer>
         </NativeBaseProvider>
     );
 }
