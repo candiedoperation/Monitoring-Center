@@ -1,21 +1,36 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import { DefaultTheme as NavigatorDefaultTheme } from '@react-navigation/native';
+import ApplicationInterface from './appsource/screens/ApplicationInterface';
+import { NativeBaseProvider } from 'native-base';
+import { StatusBar } from 'expo-status-bar';
+
+const monitoringTheme = {
+  ...DefaultTheme,
+  roundness: 2,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: "#bc245d",
+    accent: "#8a715e"
+  }
+}
+
+const navigationTheme = {
+  ...NavigatorDefaultTheme,
+  colors: {
+    ...NavigatorDefaultTheme.colors,
+    primary: "#bc245d"
+  }
+}
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NativeBaseProvider>
+      <PaperProvider theme={monitoringTheme}>
+        <ApplicationInterface navigationtheme={navigationTheme}></ApplicationInterface>
+      </PaperProvider>
+
+      <StatusBar style="auto" backgroundColor="#bc245d" translucent={false}></StatusBar>
+    </NativeBaseProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
