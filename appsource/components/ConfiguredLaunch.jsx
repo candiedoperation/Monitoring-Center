@@ -37,6 +37,7 @@ const ConfiguredLaunch = (props) => {
                 configuredComputers.push(
                     <ComputerDisplay
                         key={uuid}
+                        enlargeDisplay={props.enlargeDisplay}
                         computerUUID={uuid}
                         computerAddress={data.computerAddress}
                         computerAuth={data.computerAuth}

@@ -31,6 +31,7 @@
     "react-dom": "17.0.1",
     "react-native": "0.64.2",
     "react-native-device-info": "^8.4.3",
+    "react-native-fast-image": "^8.5.11",
     "react-native-gesture-handler": "~1.10.2",
     "react-native-image-viewing": "^0.2.1",
     "react-native-paper": "^4.9.2",
