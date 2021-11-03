@@ -30,7 +30,7 @@ import { ImageBackground } from 'react-native';
 const ComputerDisplay = (props) => {
     console.log(props.computerAddress);
     var frameBufferInterval;
-    var APIKey = { authData: {}, connectionUid: "", validUntil: 0 };
+    const [APIKey, setAPIKey] = React.useState({});
     const [frameBufferURL, setFrameBufferURL] = React.useState("");
     const [frameBufferBackground, setFrameBufferBackground] = React.useState(computerDisplayTheme.displayInderminate);
     const [computerTitle, setComputerTitle] = React.useState("Connecting…");
@@ -83,8 +83,8 @@ const ComputerDisplay = (props) => {
                     withCredentials: true,
                     crossDomain: true
                 }).then((response) => {
-                    if (response.data.session == -1) { setComputerTitle ("Logged Out"); }
-                    else { setComputerTitle (response.data.login) }
+                    if (response.data.session == -1) { setComputerTitle("Logged Out"); }
+                    else { setComputerTitle(response.data.login) }
                 }).catch((error) => {
                     setComputerTitle("Live View")
                 });
@@ -121,6 +121,13 @@ const ComputerDisplay = (props) => {
         }
     }
 
+    function handleFeaturesButtonRequest() {
+        props.actionsRequest({
+            address: `${props.computerAddress.split("/")[0]}//${props.computerAddress.split("/")[2]}/api/v1/feature`,
+            connectionUid: APIKey.connectionUid
+        })
+    }
+
     return (
         <Card margin={8} elevation={4}>
             <ImageBackground
@@ -136,7 +143,7 @@ const ComputerDisplay = (props) => {
                 />
             </ImageBackground>
             <Card.Actions>
-                <Flex flexShrink={1} flexDirection="column" marginLeft={1}>
+                <Flex flexShrink={1} flexDirection="column" marginLeft={1} marginRight={1}>
                     <Title ellipsizeMode={frameBufferURL == "" ? "tail" : "head"} numberOfLines={1}>{computerTitle == "" ? "Connecting…" : computerTitle}</Title>
                     <Caption numberOfLines={1}>{props.computerAddress.split("/")[2]}</Caption>
                 </Flex>
@@ -148,12 +155,12 @@ const ComputerDisplay = (props) => {
                         mode="contained">
                         View
                     </Button>
-                    <Button 
+                    <Button
                         margin={3}
-                        onPress={() => { props.actionsRequest() }} 
+                        onPress={handleFeaturesButtonRequest}
                         disabled={frameBufferURL == "" ? true : false}
                         mode="outlined">
-                            Actions
+                        Actions
                     </Button>
                 </Flex>
             </Card.Actions>

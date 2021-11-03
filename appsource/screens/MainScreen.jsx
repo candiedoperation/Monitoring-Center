@@ -46,8 +46,8 @@ const MainScreen = React.forwardRef((props, ref) => {
         EnlargedFrameBufferReference.current.requestFullScreenDisplay(APIKey, connectionAddress);
     }
 
-    function handleActionsRequest () {
-        FeatureImplementationReference.current.requestModalVisibility();
+    function handleActionsRequest (connectionData) {
+        FeatureImplementationReference.current.requestModalVisibility(connectionData);
     }
 
     setPrivateKey("atheesh", "<PRIVATE-KEY>", () => { }, () => { });

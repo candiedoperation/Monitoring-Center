@@ -16,23 +16,48 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import React from 'react';
-import { Checkbox, Snackbar, Dialog, Portal, TextInput, Button, Provider, RadioButton, Text, Subheading } from 'react-native-paper';
+import React, { useEffect } from 'react';
+import { Title, List, Checkbox, Snackbar, Dialog, Portal, TextInput, Button, Provider, RadioButton, Text, Subheading, ActivityIndicator } from 'react-native-paper';
 import { Box, Flex, ScrollView } from 'native-base';
 import axios from 'axios';
 import { monitoringTheme } from '../themes/bubblegum';
+import { alignSelf } from 'styled-system';
 
 const FeatureImplementation = React.forwardRef((props, ref) => {
     const [visible, setVisible] = React.useState(false);
-    const [snackBarVisible, setSnackBarVisible] = React.useState(false);
+    const [availableFeatures, setAvailableFeatures] = React.useState([]);
+    const [connectionData, setConnectionData] = React.useState({});    
     const [doneButtonDisabled, setDoneButtonDisabled] = React.useState(true);
-    const [snackBarText, setSnackBarText] = React.useState('');
+    const [renderUUID, requestRender] = React.useState(0);
 
     React.useImperativeHandle(ref, () => ({
-        requestModalVisibility() {
+        requestModalVisibility(internalConnectionData) {
+            console.error(internalConnectionData);
+            setConnectionData(internalConnectionData);
             setVisible(true);
         }
     }));
+
+    function initializationParams () {
+        console.warn(connectionData.address)
+        axios.get(connectionData.address, {
+            headers: { "connection-uid": connectionData.connectionUid },
+            withCredentials: true,
+            crossDomain: true            
+        }).then((response) => {
+            console.log(response.data)
+        }).catch((error) => {
+            console.log(error);
+            alert ("Failed to Fetch Available Features");
+            setVisible(false);
+        });
+    }
+
+    function destructionParams () {
+        
+    }
+
+    useEffect(visible == true ? initializationParams : destructionParams, [visible]);
 
     return (
         <Provider theme={monitoringTheme}>
@@ -41,26 +66,15 @@ const FeatureImplementation = React.forwardRef((props, ref) => {
                     <Dialog.Title>Available Features</Dialog.Title>
                     <Dialog.Content style={{ maxHeight: "75%" }}>
                         <ScrollView>
+                            <List.AccordionGroup minHeight="full">
 
+                            </List.AccordionGroup>
                         </ScrollView>
                     </Dialog.Content>
                     <Dialog.Actions>
-                        <Button onPress={ () => { setVisible(false) } }>Close</Button>
+                        <Button onPress={() => { setVisible(false) }}>Close</Button>
                     </Dialog.Actions>
                 </Dialog>
-            </Portal>
-            <Portal>
-                <Snackbar
-                    visible={snackBarVisible}
-                    onDismiss={() => { setSnackBarVisible(false) }}
-                    action={{
-                        label: 'Need Help ?',
-                        onPress: () => {
-                            props.navigation.navigate('Help')
-                        },
-                    }}>
-                    {snackBarText}
-                </Snackbar>
             </Portal>
         </Provider>
     );
