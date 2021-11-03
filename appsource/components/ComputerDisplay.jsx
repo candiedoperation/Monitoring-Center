@@ -18,6 +18,7 @@
 
 import React from 'react';
 import axios from 'axios';
+import { Buffer } from 'buffer';
 import { Button, Title, Card, Caption } from 'react-native-paper';
 import { Flex } from 'native-base';
 import { computerDisplayTheme } from '../themes/bubblegum';
@@ -25,6 +26,7 @@ import { getPrivateKey } from '../controllers/StorageController';
 
 
 const ComputerDisplay = (props) => {
+    console.log (props.computerAddress);
     var frameBufferInterval;
     var APIKey = { authData: {}, connectionUid: "", validUntil: 0 };
     const [frameBufferURL, setFrameBufferURL] = React.useState("");
@@ -71,8 +73,7 @@ const ComputerDisplay = (props) => {
                 APIKey.connectionUid = response.data["connection-uid"];
                 APIKey.validUntil = response.data["validUntil"];
 
-                getFrameBuffer();
-                frameBufferInterval = setInterval(getFrameBuffer, 3500);
+                if (frameBufferURL == "") { setInterval (getFrameBuffer, 3000); }
             })
             .catch(function (error) {
                 setComputerTitle("Authentication Failed")
@@ -87,14 +88,15 @@ const ComputerDisplay = (props) => {
             completeAuthentication(APIKey.authData);
         } else {
             axios.get(`${props.computerAddress.split("/")[0]}//${props.computerAddress.split("/")[2]}/api/v1/framebuffer?monitoringCenterTime=${new Date().getTime()}`, {
-                headers: { "Connection-Uid": APIKey.connectionUid },
+                headers: { "connection-uid": APIKey.connectionUid, Accept: "image/png" },
+                responseType: 'arraybuffer',
                 withCredentials: true,
                 crossDomain: true
             }).then((response) => {
-                //console.log(response);
+                console.log(`Refreshing Frame Buffer: ${ new Date().getTime() }`)
+                setFrameBufferURL(`data:image/png;base64,${Buffer.from(response.data, 'binary').toString('base64')}`);
             }).catch((error) => {
-                console.log(error.toJSON());
-                clearInterval(frameBufferInterval);
+                console.log(error);
                 setComputerTitle("Server Error")
                 setFrameBufferURL("");
             });
@@ -103,7 +105,7 @@ const ComputerDisplay = (props) => {
 
     return (
         <Card margin={8} elevation={4}>
-            <Card.Cover source={frameBufferURL == "" ? computerDisplayTheme.displayInderminate : frameBufferURL} />
+            <Card.Cover fadeDuration={0} source={frameBufferURL == "" ? computerDisplayTheme.displayInderminate : { uri: frameBufferURL }} />
             <Card.Actions>
                 <Flex flexShrink={1} flexDirection="column" marginLeft={1}>
                     <Title ellipsizeMode={frameBufferURL == "" ? "tail" : "head"} numberOfLines={1}>{computerTitle == "" ? "Connecting…" : computerTitle}</Title>

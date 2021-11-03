@@ -38,7 +38,7 @@ const MainScreen = React.forwardRef((props, ref) => {
         AddComputerModalReference.current.requestModalVisibility(true);
     }
 
-    setPrivateKey("atheesh", "<PRIVATE_KEY>", () => { }, () => { });
+    setPrivateKey("atheesh", "<PRIVATE-KEY>", () => { }, () => { });
 
     fetchComputers((computerList) => {
         if (Object.keys(computerList).length != 0) {
