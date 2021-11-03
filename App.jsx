@@ -16,12 +16,21 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import 'react-native-gesture-handler';
-import { registerRootComponent } from 'expo';
+import React from 'react';
+import { Provider as PaperProvider } from 'react-native-paper';
+import ApplicationInterface from './appsource/screens/ApplicationInterface';
+import { NativeBaseProvider } from 'native-base';
+import { StatusBar } from 'expo-status-bar';
+import { navigationTheme, monitoringTheme } from './appsource/themes/bubblegum';
 
-import App from './App';
+export default function App() {
+  return (
+    <NativeBaseProvider>
+      <PaperProvider theme={monitoringTheme}>
+        <ApplicationInterface navigationtheme={navigationTheme}></ApplicationInterface>
+      </PaperProvider>
 
-// registerRootComponent calls AppRegistry.registerComponent('main', () => App);
-// It also ensures that whether you load the app in Expo Go or in a native build,
-// the environment is set up appropriately
-registerRootComponent(App);
+      <StatusBar style="inverted" backgroundColor="#bc245d" translucent={false}></StatusBar>
+    </NativeBaseProvider>
+  );
+}

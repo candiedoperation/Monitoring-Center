@@ -16,12 +16,28 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import 'react-native-gesture-handler';
-import { registerRootComponent } from 'expo';
+import React from 'react';
+import { View, Text, Button, StyleSheet } from 'react-native';
 
-import App from './App';
+const SettingsScreen = (props) => {
+    return (
+        <View style={style.container}>
+            <Text>Settings Screen</Text>
+            <Button
+                title="Go to MainScreen"
+                onPress={() => props.navigation.navigate('MainScreen')}
+            />
+        </View>
+    );
+}
 
-// registerRootComponent calls AppRegistry.registerComponent('main', () => App);
-// It also ensures that whether you load the app in Expo Go or in a native build,
-// the environment is set up appropriately
-registerRootComponent(App);
+
+const style = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+});
+
+export default SettingsScreen;
