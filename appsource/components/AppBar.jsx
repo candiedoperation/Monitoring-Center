@@ -37,7 +37,7 @@ const AppBar = (props) => {
             <Appbar.Content title={props.route.name} />
             <Appbar.Action style={{ display: props.route.name == 'Computers' ? 'flex' : 'none' }} icon="plus" onPress={props.onUserAddServiceRequest} />
             <Appbar.Action disabled={!refreshAllowed} style={{ display: props.route.name == 'Computers' ? 'flex' : 'none' }} icon="refresh" onPress={handleRefreshRequest} />
-            <Appbar.Action style={{ display: props.route.name == 'Computers' ? 'flex' : 'none' }} icon="cog-outline" onPress={props.onUserSettingsRequest} />
+            <Appbar.Action style={{ display: props.route.name == 'Computers' ? 'flex' : 'none' }} icon="cog-outline" onPress={() => { props.navigation.jumpTo("Settings") }} />
         </Appbar>
     );
 };

@@ -78,6 +78,17 @@ const ComputerDisplay = (props) => {
                 APIKey.connectionUid = response.data["connection-uid"];
                 APIKey.validUntil = response.data["validUntil"];
 
+                axios.get(`${props.computerAddress.split("/")[0]}//${props.computerAddress.split("/")[2]}/api/v1/user`, {
+                    headers: { "connection-uid": APIKey.connectionUid },
+                    withCredentials: true,
+                    crossDomain: true
+                }).then((response) => {
+                    if (response.data.session == -1) { setComputerTitle ("Logged Out"); }
+                    else { setComputerTitle (response.data.login) }
+                }).catch((error) => {
+                    setComputerTitle("Live View")
+                });
+
                 if (frameBufferURL == "") { setInterval(getFrameBuffer, 3000); }
             })
             .catch(function (error) {
@@ -131,12 +142,19 @@ const ComputerDisplay = (props) => {
                 </Flex>
                 <Flex style={{ flexGrow: 1, flexDirection: "row-reverse" }}>
                     <Button
+                        margin={3}
                         onPress={() => { props.enlargeDisplay(APIKey, `${props.computerAddress.split("/")[0]}//${props.computerAddress.split("/")[2]}/api/v1/framebuffer`) }}
                         disabled={frameBufferURL == "" ? true : false}
                         mode="contained">
                         View
                     </Button>
-                    <Button disabled={frameBufferURL == "" ? true : false}>Actions</Button>
+                    <Button 
+                        margin={3}
+                        onPress={() => { props.actionsRequest() }} 
+                        disabled={frameBufferURL == "" ? true : false}
+                        mode="outlined">
+                            Actions
+                    </Button>
                 </Flex>
             </Card.Actions>
         </Card>

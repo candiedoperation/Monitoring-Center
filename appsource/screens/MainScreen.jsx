@@ -24,10 +24,12 @@ import FirstLaunch from '../components/FirstLaunch.jsx';
 import { fetchComputers, setPrivateKey } from '../controllers/StorageController.js';
 import { monitoringTheme } from '../themes/bubblegum.js';
 import EnlargedFrameBuffer from '../components/EnlargedFrameBuffer.jsx';
+import FeatureImplementation from '../components/FeatureImplementation.jsx';
 
 const MainScreen = React.forwardRef((props, ref) => {
     const AddComputerModalReference = React.useRef();
     const EnlargedFrameBufferReference = React.useRef();
+    const FeatureImplementationReference = React.useRef();
     const [isListEmpty, setListEmpty] = React.useState(true); //fetchComputers
 
     React.useImperativeHandle(ref, () => ({
@@ -44,6 +46,10 @@ const MainScreen = React.forwardRef((props, ref) => {
         EnlargedFrameBufferReference.current.requestFullScreenDisplay(APIKey, connectionAddress);
     }
 
+    function handleActionsRequest () {
+        FeatureImplementationReference.current.requestModalVisibility();
+    }
+
     setPrivateKey("atheesh", "<PRIVATE-KEY>", () => { }, () => { });
 
     fetchComputers((computerList) => {
@@ -58,6 +64,7 @@ const MainScreen = React.forwardRef((props, ref) => {
         <Provider theme={monitoringTheme}>
             <ConfiguredLaunch
                 enlargeDisplay={handleFullScreenRequest}
+                actionsRequest={handleActionsRequest}
                 style={{
                     flexGrow: 1,
                     minHeight: "100%",
@@ -77,6 +84,7 @@ const MainScreen = React.forwardRef((props, ref) => {
             />
 
             <AddComputer navigation={props.navigation} ref={AddComputerModalReference}></AddComputer>
+            <FeatureImplementation ref={FeatureImplementationReference} />
             <EnlargedFrameBuffer ref={EnlargedFrameBufferReference} />            
         </Provider>
     );
