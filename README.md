@@ -97,4 +97,4 @@ fakeroot make package
 sudo dpkg -i veyon-*****.deb
 ```
 
-Versions of Veyon prior to 4.5 do not have WebAPI support and hence are incompatible with this app
+⚠️ Versions of Veyon prior to 4.5 do not have WebAPI support and hence are incompatible with this app
