@@ -1,8 +1,6 @@
 import { DefaultTheme as NavigatorDefaultTheme } from '@react-navigation/native';
 import { DefaultTheme as PaperDefaultTheme } from 'react-native-paper';
 
-const displayInderminateImage = require('./indeterminateDisplay.png');
-
 const monitoringTheme = {
     ...PaperDefaultTheme,
     roundness: 2,
@@ -30,7 +28,8 @@ const navigationTheme = {
 }
 
 const computerDisplayTheme = {
-    displayInderminate: require('./indeterminateDisplay.png')
+    displayInderminate: require('./indeterminateDisplay.png'),
+    frameBufferIndeterminate: require('./indeterminateFrame.png')
 }
 
 export { monitoringTheme, navigationTheme, computerDisplayTheme, frameBufferTheme };

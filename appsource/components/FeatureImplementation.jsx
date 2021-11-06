@@ -91,7 +91,8 @@ const FeatureImplementation = React.forwardRef((props, ref) => {
             <Portal>
                 <Dialog visible={visible} onDismiss={() => { setVisible(false); }} contentContainerStyle={modalStyle}>
                     <Dialog.Title>Available Features</Dialog.Title>
-                    <Dialog.ScrollArea style={{ maxHeight: "90%" }}>
+                    <Dialog.ScrollArea style={{ maxHeight: "90%", paddingLeft: 0, paddingRight: 0 }}>
+                    <ActivityIndicator style={{ margin: 30, display: (availableFeatures.length != 0) ? 'none' : 'flex' }}></ActivityIndicator>
                         <ScrollView>
                             <List.AccordionGroup>{availableFeatures}</List.AccordionGroup>
                         </ScrollView>

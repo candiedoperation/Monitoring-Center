@@ -1,7 +1,7 @@
 import axios from "axios";
 import React from "react";
 import { Buffer } from "buffer";
-import { Button, Dialog, Portal, Provider } from "react-native-paper";
+import { ActivityIndicator, Button, Dialog, Portal, Provider } from "react-native-paper";
 import { PinchGestureHandler } from "react-native-gesture-handler";
 import { computerDisplayTheme, frameBufferTheme, monitoringTheme } from "../themes/bubblegum";
 import FastImage from "react-native-fast-image";
@@ -12,7 +12,7 @@ const EnlargedFrameBuffer = React.forwardRef((props, ref) => {
     const [bufferInterval, setBufferInterval] = React.useState();
     const [visible, setVisible] = React.useState(false);
     const [frameBufferURL, setFrameBufferURL] = React.useState("");
-    const [frameBufferBackground, setFrameBufferBackground] = React.useState(computerDisplayTheme.displayInderminate);
+    const [frameBufferBackground, setFrameBufferBackground] = React.useState(computerDisplayTheme.frameBufferIndeterminate);
     const [frameBufferDimensions, setFrameBufferDimensions] = React.useState({ width: "100%", height: 10 });
     const [frameBufferOrientation, setFrameBufferOrientation] = React.useState(false); //true for portrait and false for landscape
     const [renderUUID, requestRender] = React.useState(0);
@@ -85,19 +85,20 @@ const EnlargedFrameBuffer = React.forwardRef((props, ref) => {
                             <ImageBackground
                                 resizeMode="contain"
                                 style={{ alignSelf: "center", width: frameBufferDimensions.width, height: frameBufferDimensions.height }}
-                                source={frameBufferURL == "" ? computerDisplayTheme.displayInderminate : frameBufferBackground}
+                                source={frameBufferURL == "" ? computerDisplayTheme.frameBufferIndeterminate : frameBufferBackground}
                             >
                                 <FastImage
                                     onLoad={calculateFrameBufferDimensions}
                                     onLoadEnd={() => { setFrameBufferBackground(frameBufferURL) }}
                                     style={{ alignSelf: "center", width: frameBufferDimensions.width, height: frameBufferDimensions.height }}
                                     resizeMode={FastImage.resizeMode.contain}
-                                    source={frameBufferURL == "" ? computerDisplayTheme.displayInderminate : frameBufferURL}
+                                    source={frameBufferURL == "" ? computerDisplayTheme.frameBufferIndeterminate : frameBufferURL}
                                 />
                             </ImageBackground>
                         </ScrollView>
                     </ScrollView>
                     <Button icon="close" theme={frameBufferTheme} style={{ position: 'absolute', opacity: 0.6, margin: 5 }} onPress={handleSelfClosure} mode="contained">Close</Button>
+                    <ActivityIndicator color="#ffffff" animating={(frameBufferURL == "") ? true : false} style={{ position: 'absolute', alignSelf: 'center', marginTop: 30 }}></ActivityIndicator>                        
                 </Dialog>
             </Portal>
         </Provider>
