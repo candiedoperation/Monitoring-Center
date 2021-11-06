@@ -13,6 +13,13 @@ const monitoringTheme = {
     }
 }
 
+const frameBufferTheme = {
+    ...monitoringTheme, 
+    colors: {
+        backdrop: "#000000"        
+    }
+}
+
 const navigationTheme = {
     ...NavigatorDefaultTheme,
     colors: {
@@ -25,4 +32,4 @@ const computerDisplayTheme = {
     displayInderminate: require('./indeterminateDisplay.png')
 }
 
-export { monitoringTheme, navigationTheme, computerDisplayTheme };
+export { monitoringTheme, navigationTheme, computerDisplayTheme, frameBufferTheme };

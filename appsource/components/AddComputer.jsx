@@ -164,7 +164,7 @@ export const AddComputer = React.forwardRef((props, ref) => {
             <Portal>
                 <Dialog visible={visible} onDismiss={() => { setVisible(false); }} contentContainerStyle={modalStyle}>
                     <Dialog.Title>Add a Computer</Dialog.Title>
-                    <Dialog.Content style={{ maxHeight: "75%" }}>
+                    <Dialog.ScrollArea>
                         <ScrollView>
                             <TextInput error={connectionError01} value={IPAddressText} disabled={primaryInfoDisabled} onChangeText={handleIPAddressKeyin} mode="outlined" label="Computer Domain or IP Address" />
                             <Flex marginTop={3} direction="row" alignItems="center">
@@ -200,7 +200,7 @@ export const AddComputer = React.forwardRef((props, ref) => {
                                 </Flex>
                             </Box>
                         </ScrollView>
-                    </Dialog.Content>
+                    </Dialog.ScrollArea>
                     <Dialog.Actions>
                         <Button onPress={computerAdditionCompleted}>Cancel</Button>
                         <Button disabled={doneButtonDisabled} onPress={completeComputerAddition}>Add Computer</Button>

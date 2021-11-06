@@ -80,7 +80,8 @@ const FeatureImplementation = React.forwardRef((props, ref) => {
     }
 
     function destructionParams () {
-        
+        setAvailableFeatures([]);
+        requestRender(getRandomId());
     }
 
     React.useEffect(visible == true ? initializationParams : destructionParams, [visible]);
@@ -90,11 +91,11 @@ const FeatureImplementation = React.forwardRef((props, ref) => {
             <Portal>
                 <Dialog visible={visible} onDismiss={() => { setVisible(false); }} contentContainerStyle={modalStyle}>
                     <Dialog.Title>Available Features</Dialog.Title>
-                    <Dialog.Content style={{ maxHeight: "75%" }}>
+                    <Dialog.ScrollArea style={{ maxHeight: "90%" }}>
                         <ScrollView>
-                            <List.AccordionGroup minHeight="full">{availableFeatures}</List.AccordionGroup>
+                            <List.AccordionGroup>{availableFeatures}</List.AccordionGroup>
                         </ScrollView>
-                    </Dialog.Content>
+                    </Dialog.ScrollArea>
                     <Dialog.Actions>
                         <Button onPress={() => { setVisible(false) }}>Close</Button>
                     </Dialog.Actions>
