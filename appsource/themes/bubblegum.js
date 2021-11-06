@@ -15,7 +15,8 @@ const monitoringTheme = {
 
 const frameBufferTheme = {
     ...monitoringTheme, 
-    colors: {
+    colors: {       
+        primary: "#000000",
         backdrop: "#000000"        
     }
 }

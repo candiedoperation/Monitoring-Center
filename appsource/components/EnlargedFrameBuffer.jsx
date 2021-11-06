@@ -3,15 +3,16 @@ import React from "react";
 import { Buffer } from "buffer";
 import { Button, Dialog, Portal, Provider } from "react-native-paper";
 import { PinchGestureHandler } from "react-native-gesture-handler";
-import { computerDisplayTheme, frameBufferTheme } from "../themes/bubblegum";
+import { computerDisplayTheme, frameBufferTheme, monitoringTheme } from "../themes/bubblegum";
 import FastImage from "react-native-fast-image";
-import { ScrollView } from "native-base";
-import { Dimensions } from "react-native";
+import { ScrollView, Flex } from "native-base";
+import { Dimensions, ImageBackground } from "react-native";
 
 const EnlargedFrameBuffer = React.forwardRef((props, ref) => {
     var bufferInterval;
     const [visible, setVisible] = React.useState(false);
     const [frameBufferURL, setFrameBufferURL] = React.useState("");
+    const [frameBufferBackground, setFrameBufferBackground] = React.useState(computerDisplayTheme.displayInderminate);    
     const [frameBufferDimensions, setFrameBufferDimensions] = React.useState({ width: "100%", height: 10 });
     const [frameBufferOrientation, setFrameBufferOrientation] = React.useState(false); //true for portrait and false for landscape
     const [renderUUID, requestRender] = React.useState(0);
@@ -60,11 +61,12 @@ const EnlargedFrameBuffer = React.forwardRef((props, ref) => {
         setFrameBufferURL("");
     }
 
-    function setFrameBufferBackground(frameBufferLocation) {
-
-    }
-
     function calculateFrameBufferDimensions(frameBufferDimensions) {
+        /*
+         * Initally Planned to make aspect ratio fit based on orientation but,
+         * later decided to add scrollbars to prevent implementation of pinch to zoom 
+         */
+
         setFrameBufferDimensions((frameBufferOrientation == true) ? {
             width: Dimensions.get('window').width,
             height: (frameBufferDimensions.nativeEvent.height / frameBufferDimensions.nativeEvent.width) * Dimensions.get('window').width
@@ -74,29 +76,28 @@ const EnlargedFrameBuffer = React.forwardRef((props, ref) => {
         });
     }
 
-    function handleGestureEvent(event) {
-        console.log(event.nativeEvent.scale);
-    }
-
-    Dimensions.addEventListener('change', () => {
-
-    });
-
     return (
         <Provider theme={frameBufferTheme}>
             <Portal>
-                <Dialog style={{ height: "100%", justifyContent: 'center', marginTop: 0, marginLeft: 0, marginRight: 0 }} visible={visible} onDismiss={handleSelfClosure}>
+                <Dialog style={{ height: "100%", marginTop: 0, marginLeft: 0, marginRight: 0 }} visible={visible} onDismiss={handleSelfClosure}>
                     <ScrollView alignSelf="center">
                         <ScrollView horizontal={true}>
-                            <FastImage
-                                onLoad={calculateFrameBufferDimensions}
-                                onLoadEnd={() => { setFrameBufferBackground(frameBufferURL) }}
+                            <ImageBackground
+                                resizeMode="contain"
                                 style={{ alignSelf: "center", width: frameBufferDimensions.width, height: frameBufferDimensions.height }}
-                                resizeMode={FastImage.resizeMode.contain}
-                                source={frameBufferURL == "" ? computerDisplayTheme.displayInderminate : frameBufferURL}
-                            />
+                                source={frameBufferURL == "" ? computerDisplayTheme.displayInderminate : frameBufferBackground}
+                            >
+                                <FastImage
+                                    onLoad={calculateFrameBufferDimensions}
+                                    onLoadEnd={() => { setFrameBufferBackground(frameBufferURL) }}
+                                    style={{ alignSelf: "center", width: frameBufferDimensions.width, height: frameBufferDimensions.height }}
+                                    resizeMode={FastImage.resizeMode.contain}
+                                    source={frameBufferURL == "" ? computerDisplayTheme.displayInderminate : frameBufferURL}
+                                />
+                            </ImageBackground>
                         </ScrollView>
                     </ScrollView>
+                    <Button icon="close" theme={frameBufferTheme} style={{ position: 'absolute', opacity: 0.6, margin: 5 }} onPress={handleSelfClosure} mode="contained">Close</Button>
                 </Dialog>
             </Portal>
         </Provider>
