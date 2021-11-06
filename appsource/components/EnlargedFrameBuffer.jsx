@@ -9,10 +9,10 @@ import { ScrollView, Flex } from "native-base";
 import { Dimensions, ImageBackground } from "react-native";
 
 const EnlargedFrameBuffer = React.forwardRef((props, ref) => {
-    var bufferInterval;
+    const [bufferInterval, setBufferInterval] = React.useState();
     const [visible, setVisible] = React.useState(false);
     const [frameBufferURL, setFrameBufferURL] = React.useState("");
-    const [frameBufferBackground, setFrameBufferBackground] = React.useState(computerDisplayTheme.displayInderminate);    
+    const [frameBufferBackground, setFrameBufferBackground] = React.useState(computerDisplayTheme.displayInderminate);
     const [frameBufferDimensions, setFrameBufferDimensions] = React.useState({ width: "100%", height: 10 });
     const [frameBufferOrientation, setFrameBufferOrientation] = React.useState(false); //true for portrait and false for landscape
     const [renderUUID, requestRender] = React.useState(0);
@@ -21,11 +21,11 @@ const EnlargedFrameBuffer = React.forwardRef((props, ref) => {
     React.useImperativeHandle(ref, () => ({
         requestFullScreenDisplay(APIKey, connectionAddress) {
             if (frameBufferURL == "") {
-                bufferInterval = setInterval(
+                setBufferInterval(setInterval(
                     () => {
                         bufferImages(APIKey, connectionAddress)
                     },
-                    1000);
+                    1500));
             }
 
             setVisible(true);
@@ -43,14 +43,13 @@ const EnlargedFrameBuffer = React.forwardRef((props, ref) => {
                 withCredentials: true,
                 crossDomain: true
             }).then((response) => {
-                console.log(`Refreshing Frame Buffer: ${new Date().getTime()}`)
+                console.log(`Refreshing Frame Buffer @213049: ${new Date().getTime()}`)
                 setFrameBufferURL({
                     uri: `data:image/jpeg;base64,${Buffer.from(response.data, 'binary').toString('base64')}`
                 });
             }).catch((error) => {
                 console.log(error);
-                setComputerTitle("Server Error")
-                setFrameBufferURL("");
+                handleSelfClosure();
             });
         }
     }
@@ -59,6 +58,7 @@ const EnlargedFrameBuffer = React.forwardRef((props, ref) => {
         setVisible(false);
         clearInterval(bufferInterval);
         setFrameBufferURL("");
+        setFrameBufferBackground("");
     }
 
     function calculateFrameBufferDimensions(frameBufferDimensions) {
