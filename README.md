@@ -79,6 +79,7 @@ cmake -DCMAKE_INSTALL_PREFIX=/usr ..
 fakeroot make package
 
 sudo dpkg -i veyon-*****.deb
+sudo apt install -f
 ```
 
 #### Building Veyon 4.5 From Source
@@ -95,6 +96,7 @@ cmake -DCMAKE_INSTALL_PREFIX=/usr ..
 fakeroot make package
 
 sudo dpkg -i veyon-*****.deb
+sudo apt install -f
 ```
 
 ⚠️ Versions of Veyon prior to 4.5 do not have WebAPI support and hence are incompatible with this app
