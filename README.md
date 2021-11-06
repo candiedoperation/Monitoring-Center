@@ -82,7 +82,7 @@ sudo dpkg -i veyon-*****.deb
 ```
 
 #### Building Veyon 4.5 From Source
-The following is the way to build veyon 4.6 from source on Ubuntu 20.04 (There might be slight changes in commands in other OSes)
+The following is the way to build veyon 4.5 from source on Ubuntu 20.04 (There might be slight changes in commands in other OSes)
 ```
 git clone --recursive https://github.com/veyon/veyon.git
 cd veyon
