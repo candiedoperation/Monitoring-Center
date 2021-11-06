@@ -63,8 +63,9 @@ export const AddComputer = React.forwardRef((props, ref) => {
         const serverIP = ((ProxyAddressText != undefined && ProxyAddressText.trim() != "") ? ProxyAddressText.split(':')[0] : IPAddressText.split(':')[0]);
         const serverPort = ((ProxyAddressText != undefined && ProxyAddressText.trim() != "") ? ProxyAddressText.split(':')[1] : IPAddressText.split(':')[1]);
         const serverAddress = (serverIP == IPAddressText.split(':')[0] ? "localhost" : IPAddressText.split(':')[0]);
+        const addressPort = ((IPAddressText.split(':')[1] != "") ? `:${IPAddressText.split(':')[1]}` : "");
         const protocol = (usingHTTPS == true ? "https" : "http");
-        const requestURL = `${protocol}://${serverIP}:${(serverPort != undefined && serverPort.trim() != "") ? serverPort : "11080"}/api/v1/authentication/${serverAddress}`;
+        const requestURL = `${protocol}://${serverIP}:${(serverPort != undefined && serverPort.trim() != "") ? serverPort : "11080"}/api/v1/authentication/${serverAddress}${addressPort}`;
 
         //console.log(`Requesting: ${requestURL}`);        
         return requestURL;
