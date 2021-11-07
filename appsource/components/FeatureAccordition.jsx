@@ -4,6 +4,9 @@ import { List } from "react-native-paper";
 const FeatureAccordition = (props) => {
     const [parentTitle, setParentTitle] = React.useState();
     const [parentDescription, setParentDescription] = React.useState();
+    const [featureChildren, setFeatureChildren] = React.useState([]);
+
+    const supportedChildFeatures = [];
 
     React.useEffect(() => {
         switch (props.featureID) {
@@ -30,7 +33,7 @@ const FeatureAccordition = (props) => {
             case "8a11a75d-b3db-48b6-b9cb-f8422ddd5b0c":
                 setParentTitle("Open Website");
                 break;
-                
+
             case "e75ae9c8-ac17-4d00-8f0d-019348346208":
                 setParentTitle("Send Message");
                 break;
@@ -39,10 +42,17 @@ const FeatureAccordition = (props) => {
                 setParentTitle(props.featureData.name);
                 break;
         }
-    }, [])
+
+
+        props.featureData.children.forEach((childFeature) => {
+            featureChildren.push(<List.Item title={childFeature.name} />);
+        });
+
+    }, []);
 
     return (
         <List.Accordion id={props.featureID} left={(props_internal) => <List.Icon {...props_internal} icon="circle" />} title={parentTitle} description={parentDescription}>
+            {featureChildren}
             <List.Item title="Enable for This PC" />
         </List.Accordion>
     );
