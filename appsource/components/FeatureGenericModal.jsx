@@ -25,18 +25,32 @@ import { monitoringTheme } from '../themes/bubblegum';
 const FeatureGenericModal = React.forwardRef((props, ref) => {
   const [visible, setVisible] = React.useState(false);
   const [modalTitle, setModalTitle] = React.useState('');
+  const [modalID, setModalID] = React.useState('');
+  const [connectionData, setConnectionData] = React.useState({});
 
   React.useImperativeHandle(ref, () => ({
-    requestModalVisibility(featureID, featureTitle, internalConnectionData) {
-      setModalTitle(featureTitle);
+    requestModalVisibility(featureID, featureData, internalConnectionData) {
+      setModalTitle(featureData.name);
+      setModalID(featureID);
+      setConnectionData(internalConnectionData);
       setVisible(true);
     },
   }));
 
+  const modalStyle = {
+    backgroundColor: 'white',
+    padding: 20,
+    margin: 15,
+  };
+
   return (
     <Provider theme={monitoringTheme}>
       <Portal>
-        <Dialog visible={visible} onDismiss={() => { setVisible(false); }} contentContainerStyle={modalStyle}>
+        <Dialog
+          visible={visible}
+          onDismiss={() => { setVisible(false); }}
+          contentContainerStyle={modalStyle}
+        >
           <Dialog.Title>{modalTitle}</Dialog.Title>
           <Dialog.ScrollArea style={{ maxHeight: '90%', paddingLeft: 0, paddingRight: 0 }} />
           <Dialog.Actions>
@@ -47,11 +61,5 @@ const FeatureGenericModal = React.forwardRef((props, ref) => {
     </Provider>
   );
 });
-
-const modalStyle = {
-  backgroundColor: 'white',
-  padding: 20,
-  margin: 15,
-};
 
 export default FeatureGenericModal;

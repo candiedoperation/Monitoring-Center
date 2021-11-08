@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /*
     Monitoring Center
     Copyright (C) 2021  Atheesh Thirumalairajan
@@ -84,7 +85,11 @@ const FeatureImplementation = React.forwardRef((props, ref) => {
               key={uuid}
               featureID={uuid}
               featureData={data}
-              genericModalToggle={props.genericModalToggle}
+              genericModalToggle={(featureID, overridenFeatureName, featureData) => {
+                props.genericModalToggle(
+                  featureID, overridenFeatureName, featureData, connectionData
+                );
+              }}
               internalConnectionData={connectionData}
             />,
           );

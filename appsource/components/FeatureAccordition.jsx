@@ -13,14 +13,6 @@ const FeatureAccordition = (props) => {
 
   const supportedChildFeatures = [];
 
-  function parentToggleRequest() {
-    console.error(parentTitle);
-  }
-
-  function childToggleRequest(childFeature) {
-    alert(childFeature.name);
-  }
-
   React.useEffect(() => {
     switch (props.featureID) {
       case 'ccb535a2-1d24-4cc1-a709-8b47d2b2ac79':
@@ -56,9 +48,35 @@ const FeatureAccordition = (props) => {
         break;
     }
 
-    props.featureData.children.forEach((childFeature) => {
-      featureChildren.push(<List.Item key={childFeature.uuid} title={childFeature.name} />);
-    });
+    if (props.featureData.children.length != 0) {
+      props.featureData.children.forEach((childFeature) => {
+        featureChildren.push(
+          <List.Item
+            key={childFeature.uuid}
+            title={childFeature.name}
+            onPress={() => {
+              props.genericModalToggle(
+                childFeature.uuid,
+                childFeature,
+              );
+            }}
+          />,
+        );
+      });
+    } else {
+      featureChildren.push(
+        <List.Item
+          key={props.featureID}
+          title="Apply for This Computer"
+          onPress={() => {
+            props.genericModalToggle(
+              props.featureID,
+              props.featureData,
+            );
+          }}
+        />,
+      );
+    }
 
     // eslint-disable-next-line no-unused-expressions
     props.featureData.active === true

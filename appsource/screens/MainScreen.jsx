@@ -18,14 +18,14 @@
 
 import React from 'react';
 import { Provider } from 'react-native-paper';
-import AddComputer from '../components/AddComputer.jsx';
-import ConfiguredLaunch from '../components/ConfiguredLaunch.jsx';
-import FirstLaunch from '../components/FirstLaunch.jsx';
-import { fetchComputers, setPrivateKey } from '../controllers/StorageController.js';
-import { monitoringTheme } from '../themes/bubblegum.js';
-import EnlargedFrameBuffer from '../components/EnlargedFrameBuffer.jsx';
-import FeatureImplementation from '../components/FeatureImplementation.jsx';
-import FeatureGenericModal from '../components/FeatureGenericModal.jsx';
+import AddComputer from '../components/AddComputer';
+import ConfiguredLaunch from '../components/ConfiguredLaunch';
+import FirstLaunch from '../components/FirstLaunch';
+import { fetchComputers, setPrivateKey } from '../controllers/StorageController';
+import { monitoringTheme } from '../themes/bubblegum';
+import EnlargedFrameBuffer from '../components/EnlargedFrameBuffer';
+import FeatureImplementation from '../components/FeatureImplementation';
+import FeatureGenericModal from '../components/FeatureGenericModal';
 
 const MainScreen = React.forwardRef((props, ref) => {
   const AddComputerModalReference = React.useRef();
@@ -54,7 +54,9 @@ const MainScreen = React.forwardRef((props, ref) => {
 
   function handleGenericModalToggle(featureID, featureData, internalConnectionData) {
     FeatureGenericModalReference.current.requestModalVisibility(
-      featureID, featureData, internalConnectionData,
+      featureID,
+      featureData,
+      internalConnectionData,
     );
   }
 
