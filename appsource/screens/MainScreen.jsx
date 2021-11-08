@@ -25,69 +25,81 @@ import { fetchComputers, setPrivateKey } from '../controllers/StorageController.
 import { monitoringTheme } from '../themes/bubblegum.js';
 import EnlargedFrameBuffer from '../components/EnlargedFrameBuffer.jsx';
 import FeatureImplementation from '../components/FeatureImplementation.jsx';
+import FeatureGenericModal from '../components/FeatureGenericModal.jsx';
 
 const MainScreen = React.forwardRef((props, ref) => {
-    const AddComputerModalReference = React.useRef();
-    const EnlargedFrameBufferReference = React.useRef();
-    const FeatureImplementationReference = React.useRef();
-    const [isListEmpty, setListEmpty] = React.useState(true); //fetchComputers
+  const AddComputerModalReference = React.useRef();
+  const EnlargedFrameBufferReference = React.useRef();
+  const FeatureImplementationReference = React.useRef();
+  const FeatureGenericModalReference = React.useRef();
+  const [isListEmpty, setListEmpty] = React.useState(true); // fetchComputers
 
-    React.useImperativeHandle(ref, () => ({
-        requestShowAddComputerDialog() {
-            handleAddModalRequest();
-        }
-    }));
+  React.useImperativeHandle(ref, () => ({
+    requestShowAddComputerDialog() {
+      handleAddModalRequest();
+    },
+  }));
 
-    function handleAddModalRequest() {
-        AddComputerModalReference.current.requestModalVisibility(true);
-    }
+  function handleAddModalRequest() {
+    AddComputerModalReference.current.requestModalVisibility(true);
+  }
 
-    function handleFullScreenRequest (APIKey, connectionAddress) {
-        EnlargedFrameBufferReference.current.requestFullScreenDisplay(APIKey, connectionAddress);
-    }
+  function handleFullScreenRequest(APIKey, connectionAddress) {
+    EnlargedFrameBufferReference.current.requestFullScreenDisplay(APIKey, connectionAddress);
+  }
 
-    function handleActionsRequest (connectionData) {
-        FeatureImplementationReference.current.requestModalVisibility(connectionData);
-    }
+  function handleActionsRequest(connectionData) {
+    FeatureImplementationReference.current.requestModalVisibility(connectionData);
+  }
 
-    setPrivateKey("atheesh", "<PRIVATE-KEY>", () => { }, () => { });
-
-    fetchComputers((computerList) => {
-        if (Object.keys(computerList).length != 0) {
-            setListEmpty(false);
-        } else {
-            setListEmpty(true);
-        }
-    });
-
-    return (
-        <Provider theme={monitoringTheme}>
-            <ConfiguredLaunch
-                enlargeDisplay={handleFullScreenRequest}
-                actionsRequest={handleActionsRequest}
-                style={{
-                    flexGrow: 1,
-                    minHeight: "100%",
-                    display: (isListEmpty == false ? "flex" : "none")
-                }}
-            />
-
-            <FirstLaunch
-                navigation={props.navigation}
-                requestAddComputerModal={handleAddModalRequest}
-                style={{
-                    flexGrow: 1,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    display: (isListEmpty == true ? "flex" : "none")
-                }}
-            />
-
-            <AddComputer navigation={props.navigation} ref={AddComputerModalReference}></AddComputer>
-            <FeatureImplementation ref={FeatureImplementationReference} />
-            <EnlargedFrameBuffer ref={EnlargedFrameBufferReference} />            
-        </Provider>
+  function handleGenericModalToggle(featureID, featureData, internalConnectionData) {
+    FeatureGenericModalReference.current.requestModalVisibility(
+      featureID, featureData, internalConnectionData,
     );
-})
+  }
+
+  setPrivateKey('atheesh', '<PRIVATE-KEY>', () => { }, () => { });
+
+  fetchComputers((computerList) => {
+    if (Object.keys(computerList).length != 0) {
+      setListEmpty(false);
+    } else {
+      setListEmpty(true);
+    }
+  });
+
+  return (
+    <Provider theme={monitoringTheme}>
+      <ConfiguredLaunch
+        enlargeDisplay={handleFullScreenRequest}
+        actionsRequest={handleActionsRequest}
+        style={{
+          flexGrow: 1,
+          minHeight: '100%',
+          display: (isListEmpty == false ? 'flex' : 'none'),
+        }}
+      />
+
+      <FirstLaunch
+        navigation={props.navigation}
+        requestAddComputerModal={handleAddModalRequest}
+        style={{
+          flexGrow: 1,
+          alignItems: 'center',
+          justifyContent: 'center',
+          display: (isListEmpty == true ? 'flex' : 'none'),
+        }}
+      />
+
+      <AddComputer navigation={props.navigation} ref={AddComputerModalReference} />
+      <FeatureImplementation
+        genericModalToggle={handleGenericModalToggle}
+        ref={FeatureImplementationReference}
+      />
+      <FeatureGenericModal ref={FeatureGenericModalReference} />
+      <EnlargedFrameBuffer ref={EnlargedFrameBufferReference} />
+    </Provider>
+  );
+});
 
 export default MainScreen;
