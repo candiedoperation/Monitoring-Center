@@ -1,4 +1,4 @@
-package com.monitoring;
+package tk.cyberphase.monitoringcenter;
 
 import android.os.Bundle;
 
