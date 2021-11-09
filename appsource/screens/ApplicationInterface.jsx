@@ -16,10 +16,10 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import React from "react";
-import AppBar from "../components/AppBar";
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import AppBar from '../components/AppBar';
 import MainScreen from './MainScreen';
 import SettingsScreen from './SettingsScreen';
 import AboutScreen from './AboutScreen';
@@ -27,34 +27,36 @@ import AboutScreen from './AboutScreen';
 const Drawer = createDrawerNavigator();
 
 const ApplicationInterface = (props) => {
-    const MainScreenReference = React.useRef();
+  const MainScreenReference = React.useRef();
 
-    return (
-        <NavigationContainer theme={props.navigationtheme}>
-            <Drawer.Navigator
-                initialRouteName="Computers"
-                screenOptions={{
-                    header: (props) =>
-                        <AppBar {...props}
-                            onUserAddServiceRequest={() => {
-                                MainScreenReference.current.requestShowAddComputerDialog()
-                            }}
-                            onUserRefreshRequest={() => {
-                                MainScreenReference.current.requestDataRefresh()
-                            }}
-                            onUserSettingsRequest={() => {
-                                MainScreenReference.current.requestShowSettingsDialog(true)
-                            }}
-                        />,
-                }}
-            >
-                <Drawer.Screen name="Computers" children={(props) => <MainScreen {...props} ref={MainScreenReference} />} />
-                <Drawer.Screen name="Settings" component={SettingsScreen} />
-                <Drawer.Screen name="Help" component={SettingsScreen} />
-                <Drawer.Screen name="Licenses" component={AboutScreen} />
-            </Drawer.Navigator>
-        </NavigationContainer>
-    );
-}
+  return (
+    <NavigationContainer theme={props.navigationtheme}>
+      <Drawer.Navigator
+        initialRouteName="Computers"
+        screenOptions={{
+          header: (props) => (
+            <AppBar
+              {...props}
+              onUserAddServiceRequest={() => {
+                MainScreenReference.current.requestShowAddComputerDialog();
+              }}
+              onUserRefreshRequest={() => {
+                MainScreenReference.current.requestDataRefresh();
+              }}
+              onUserSettingsRequest={() => {
+                MainScreenReference.current.requestShowSettingsDialog(true);
+              }}
+            />
+          ),
+        }}
+      >
+        <Drawer.Screen name="Computers" children={(props) => <MainScreen {...props} ref={MainScreenReference} />} />
+        <Drawer.Screen name="Settings" component={SettingsScreen} />
+        <Drawer.Screen name="Help" component={SettingsScreen} />
+        <Drawer.Screen name="About Application" component={AboutScreen} />
+      </Drawer.Navigator>
+    </NavigationContainer>
+  );
+};
 
 export default ApplicationInterface;

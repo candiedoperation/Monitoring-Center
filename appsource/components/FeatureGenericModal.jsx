@@ -18,8 +18,11 @@
 
 import React from 'react';
 import {
-  Dialog, Portal, Button, Provider,
+  Dialog, Portal, Button, Provider, Title, Caption,
 } from 'react-native-paper';
+import FastImage from 'react-native-fast-image';
+import { ScrollView } from 'native-base';
+import { computerDisplayTheme } from '../themes/bubblegum';
 import { monitoringTheme } from '../themes/bubblegum';
 
 const FeatureGenericModal = React.forwardRef((props, ref) => {
@@ -52,7 +55,16 @@ const FeatureGenericModal = React.forwardRef((props, ref) => {
           contentContainerStyle={modalStyle}
         >
           <Dialog.Title>{modalTitle}</Dialog.Title>
-          <Dialog.ScrollArea style={{ maxHeight: '90%', paddingLeft: 0, paddingRight: 0 }} />
+          <Dialog.ScrollArea style={{ maxHeight: '90%' }}>
+            <ScrollView contentContainerStyle={{ alignItems: 'center', justifyContent: 'center', minHeight: "90%" }}>
+              <FastImage
+                style={{ width: 100, height: 100 }}
+                source={computerDisplayTheme.underConstruction}
+              />
+              <Title style={{ textAlign: 'center' }}>This Page is Under Construction</Title>
+              <Caption style={{ textAlign: 'center' }}>This Version of Monitoring Center is a Pre Release for Testing</Caption>
+            </ScrollView>
+          </Dialog.ScrollArea>
           <Dialog.Actions>
             <Button onPress={() => { setVisible(false); }}>Cancel</Button>
           </Dialog.Actions>

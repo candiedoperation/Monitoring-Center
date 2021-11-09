@@ -17,27 +17,20 @@
 */
 
 import React from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { ScrollView } from 'native-base';
+import FastImage from 'react-native-fast-image';
+import { computerDisplayTheme } from '../themes/bubblegum';
+import { Caption, Title } from 'react-native-paper';
 
-const SettingsScreen = (props) => {
-    return (
-        <View style={style.container}>
-            <Text>Settings Screen</Text>
-            <Button
-                title="Go to MainScreen"
-                onPress={() => props.navigation.navigate('MainScreen')}
-            />
-        </View>
-    );
-}
-
-
-const style = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-});
+const SettingsScreen = (props) => (
+  <ScrollView contentContainerStyle={{ alignItems: 'center', justifyContent: 'center', height: "100%" }}>
+    <FastImage
+      style={{ width: 100, height: 100 }}
+      source={computerDisplayTheme.underConstruction}
+    />
+    <Title>This Page is Under Construction</Title>
+    <Caption>This Version of Monitoring Center is a Pre Release for Testing</Caption>
+  </ScrollView>
+);
 
 export default SettingsScreen;
