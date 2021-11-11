@@ -26,22 +26,32 @@ import { monitoringTheme } from '../themes/bubblegum';
 import EnlargedFrameBuffer from '../components/EnlargedFrameBuffer';
 import FeatureImplementation from '../components/FeatureImplementation';
 import FeatureGenericModal from '../components/FeatureGenericModal';
+import AutoDiscoveryRequest from '../components/AutoDiscoveryRequest';
 
 const MainScreen = React.forwardRef((props, ref) => {
   const AddComputerModalReference = React.useRef();
+  const AutoAddComputerModalReference = React.useRef();
   const EnlargedFrameBufferReference = React.useRef();
   const FeatureImplementationReference = React.useRef();
   const FeatureGenericModalReference = React.useRef();
   const [isListEmpty, setListEmpty] = React.useState(true); // fetchComputers
 
   React.useImperativeHandle(ref, () => ({
-    requestShowAddComputerDialog() {
-      handleAddModalRequest();
+    requestShowAutoAddComputerDialog() {
+      handleAutoAddModalRequest();
     },
   }));
 
   function handleAddModalRequest() {
     AddComputerModalReference.current.requestModalVisibility(true);
+  }
+
+  function handleAutoAddModalRequest() {
+    AutoAddComputerModalReference.current.requestModalVisibility(true);
+  }
+
+  function handleAutoStartModalRequest() {
+
   }
 
   function handleFullScreenRequest(APIKey, connectionAddress) {
@@ -93,6 +103,11 @@ const MainScreen = React.forwardRef((props, ref) => {
         }}
       />
 
+      <AutoDiscoveryRequest 
+        autoAdd={handleAutoStartModalRequest} 
+        manualAdd={handleAddModalRequest} 
+        ref={AutoAddComputerModalReference} 
+      />
       <AddComputer navigation={props.navigation} ref={AddComputerModalReference} />
       <FeatureImplementation
         genericModalToggle={handleGenericModalToggle}

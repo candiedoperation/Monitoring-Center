@@ -23,6 +23,7 @@ import AppBar from '../components/AppBar';
 import MainScreen from './MainScreen';
 import SettingsScreen from './SettingsScreen';
 import AboutScreen from './AboutScreen';
+import HelpScreen from './HelpScreen';
 
 const Drawer = createDrawerNavigator();
 
@@ -38,7 +39,7 @@ const ApplicationInterface = (props) => {
             <AppBar
               {...props}
               onUserAddServiceRequest={() => {
-                MainScreenReference.current.requestShowAddComputerDialog();
+                MainScreenReference.current.requestShowAutoAddComputerDialog();
               }}
               onUserRefreshRequest={() => {
                 MainScreenReference.current.requestDataRefresh();
@@ -52,7 +53,7 @@ const ApplicationInterface = (props) => {
       >
         <Drawer.Screen name="Computers" children={(props) => <MainScreen {...props} ref={MainScreenReference} />} />
         <Drawer.Screen name="Settings" component={SettingsScreen} />
-        <Drawer.Screen name="Help" component={SettingsScreen} />
+        <Drawer.Screen name="Help" component={HelpScreen} />
         <Drawer.Screen name="About Application" component={AboutScreen} />
       </Drawer.Navigator>
     </NavigationContainer>

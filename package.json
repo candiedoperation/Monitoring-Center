@@ -34,6 +34,7 @@
     "react-native-device-info": "^8.4.3",
     "react-native-fast-image": "^8.5.11",
     "react-native-gesture-handler": "~1.10.2",
+    "react-native-iap": "^7.5.0",
     "react-native-image-viewing": "^0.2.1",
     "react-native-paper": "^4.9.2",
     "react-native-ping": "^1.2.6",

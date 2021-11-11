@@ -18,18 +18,29 @@
 
 import React from 'react';
 import { ScrollView } from 'native-base';
-import FastImage from 'react-native-fast-image';
-import { computerDisplayTheme } from '../themes/bubblegum';
-import { Caption, Title } from 'react-native-paper';
+import { Caption, List, Title } from 'react-native-paper';
+import { getVersion } from 'react-native-device-info';
 
 const SettingsScreen = (props) => (
-  <ScrollView contentContainerStyle={{ alignItems: 'center', justifyContent: 'center', height: "100%" }}>
-    <FastImage
-      style={{ width: 100, height: 100 }}
-      source={computerDisplayTheme.underConstruction}
+  <ScrollView contentContainerStyle={{ height: "100%" }}>
+    <List.Item
+      title="Authentication Keys"
+      description="Manage Public and Private Authentication Keys"
+      onPress={() => { }}
+      left={props => <List.Icon {...props} style={{ padding: 5 }} icon="key" />}
     />
-    <Title>This Page is Under Construction</Title>
-    <Caption>This Version of Monitoring Center is a Pre Release for Testing</Caption>
+    <List.Item
+      title="Preview Refresh Interval"
+      description="3 seconds"
+      onPress={() => { }}
+      left={props => <List.Icon {...props} style={{ padding: 5 }} icon="timer" />}
+    />    
+    <List.Item
+      title="About Application"
+      description={`Monitoring Center Version ${getVersion()}`}
+      onPress={() => { props.navigation.jumpTo("About Application") }}
+      left={props => <List.Icon {...props} style={{ padding: 5 }} icon="information" />}
+    />    
   </ScrollView>
 );
 
