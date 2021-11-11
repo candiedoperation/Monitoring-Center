@@ -113,7 +113,7 @@ const FeatureImplementation = React.forwardRef((props, ref) => {
   React.useEffect(visible === true ? initializationParams : destructionParams, [visible]);
 
   return (
-    <Provider theme={monitoringTheme}>
+    <Provider theme={props.theme}>
       <Portal>
         <Dialog visible={visible} onDismiss={() => { setVisible(false); }} contentContainerStyle={modalStyle}>
           <Dialog.Title>Available Features</Dialog.Title>

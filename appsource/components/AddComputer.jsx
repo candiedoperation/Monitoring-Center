@@ -162,7 +162,7 @@ const AddComputer = React.forwardRef((props, ref) => {
   };
 
   return (
-    <Provider theme={monitoringTheme}>
+    <Provider theme={props.theme}>
       <Portal>
         <Dialog visible={visible} onDismiss={() => { setVisible(false); }} contentContainerStyle={modalStyle}>
           <Dialog.Title>Add a Computer</Dialog.Title>

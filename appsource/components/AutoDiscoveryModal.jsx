@@ -16,26 +16,22 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+/* eslint-disable no-unused-expressions */
+/* eslint-disable react/prop-types */
 import React from 'react';
 import {
-  Dialog, Portal, Button, Provider, Title, Caption,
+  Dialog, Portal, Button, Provider, ActivityIndicator, Caption,
 } from 'react-native-paper';
-import FastImage from 'react-native-fast-image';
-import { ScrollView } from 'native-base';
-import { computerDisplayTheme } from '../themes/bubblegum';
+import { ScrollView, Flex } from 'native-base';
 import { monitoringTheme } from '../themes/bubblegum';
+import DiscoveredComputer from './DiscoveredComputer';
 
-const FeatureGenericModal = React.forwardRef((props, ref) => {
+const AutoDiscoveryModal = React.forwardRef((props, ref) => {
   const [visible, setVisible] = React.useState(false);
-  const [modalTitle, setModalTitle] = React.useState('');
-  const [modalID, setModalID] = React.useState('');
-  const [connectionData, setConnectionData] = React.useState({});
+  const [availableComputers, setAvailableComputers] = React.useState([]);
 
   React.useImperativeHandle(ref, () => ({
-    requestModalVisibility(featureID, featureData, internalConnectionData) {
-      setModalTitle(featureData.name);
-      setModalID(featureID);
-      setConnectionData(internalConnectionData);
+    requestModalVisibility() {
       setVisible(true);
     },
   }));
@@ -46,6 +42,10 @@ const FeatureGenericModal = React.forwardRef((props, ref) => {
     margin: 15,
   };
 
+  React.useState(() => {
+    
+  }, [visible]);
+
   return (
     <Provider theme={props.theme}>
       <Portal>
@@ -54,19 +54,25 @@ const FeatureGenericModal = React.forwardRef((props, ref) => {
           onDismiss={() => { setVisible(false); }}
           contentContainerStyle={modalStyle}
         >
-          <Dialog.Title>{modalTitle}</Dialog.Title>
-          <Dialog.ScrollArea style={{ maxHeight: '90%' }}>
-            <ScrollView contentContainerStyle={{ alignItems: 'center', justifyContent: 'center', minHeight: "90%" }}>
-              <FastImage
-                style={{ width: 100, height: 100 }}
-                source={computerDisplayTheme.underConstruction}
-              />
-              <Title style={{ textAlign: 'center' }}>This Page is Under Construction</Title>
-              <Caption style={{ textAlign: 'center' }}>This Version of Monitoring Center is a Pre Release for Testing</Caption>
+          <Dialog.Title>Discovered Computers</Dialog.Title>
+          <Dialog.ScrollArea style={{ maxHeight: '90%', paddingLeft: 0, paddingRight: 0 }}>
+            <ScrollView>
+              {availableComputers}
+              <ActivityIndicator style={{ margin: 30, display: Object.keys(availableComputers).length === 0 ? 'flex' : 'none' }} animating />
+              <Flex style={{ marginBottom: 10 }}>
+                <Caption style={{ textAlign: 'center', marginBottom: 0 }}>Didn't Find What You're Looking For?</Caption>
+                <Caption style={{ textAlign: 'center', color: monitoringTheme.colors.accent, marginTop: 0 }} onPress={() => { }}>Click Here</Caption>
+              </Flex>
             </ScrollView>
           </Dialog.ScrollArea>
           <Dialog.Actions>
-            <Button onPress={() => { setVisible(false); }}>Cancel</Button>
+            <Button>Cancel</Button>
+            <Button
+              mode="contained"
+              style={{ marginLeft: 5 }}
+            >
+              Add Selected
+            </Button>
           </Dialog.Actions>
         </Dialog>
       </Portal>
@@ -74,4 +80,4 @@ const FeatureGenericModal = React.forwardRef((props, ref) => {
   );
 });
 
-export default FeatureGenericModal;
+export default AutoDiscoveryModal;

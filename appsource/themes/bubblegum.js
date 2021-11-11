@@ -30,6 +30,16 @@ const monitoringTheme = {
   },
 };
 
+const monitoringProTheme = {
+  ...PaperDefaultTheme,
+  roundness: 5,
+  colors: {
+    ...PaperDefaultTheme.colors,
+    primary: '#f9c440',
+    accent: '#8a715e',
+  },
+};
+
 const frameBufferTheme = {
   ...monitoringTheme,
   colors: {
@@ -46,6 +56,14 @@ const navigationTheme = {
   },
 };
 
+const navigationProTheme = {
+  ...NavigatorDefaultTheme,
+  colors: {
+    ...NavigatorDefaultTheme.colors,
+    primary: '#f9c440',
+  },
+};
+
 const serviceStatus = {
   serviceActive: '#3a9104',
   serviceDisabled: '#a10705',
@@ -58,5 +76,5 @@ const computerDisplayTheme = {
 };
 
 export {
-  monitoringTheme, navigationTheme, computerDisplayTheme, frameBufferTheme, serviceStatus,
+  monitoringTheme, monitoringProTheme, navigationTheme, navigationProTheme, computerDisplayTheme, frameBufferTheme, serviceStatus,
 };

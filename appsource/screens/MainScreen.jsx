@@ -22,18 +22,22 @@ import AddComputer from '../components/AddComputer';
 import ConfiguredLaunch from '../components/ConfiguredLaunch';
 import FirstLaunch from '../components/FirstLaunch';
 import { fetchComputers, setPrivateKey } from '../controllers/StorageController';
-import { monitoringTheme } from '../themes/bubblegum';
+import { monitoringProTheme, monitoringTheme } from '../themes/bubblegum';
 import EnlargedFrameBuffer from '../components/EnlargedFrameBuffer';
 import FeatureImplementation from '../components/FeatureImplementation';
 import FeatureGenericModal from '../components/FeatureGenericModal';
 import AutoDiscoveryRequest from '../components/AutoDiscoveryRequest';
+import AutoDiscoveryModal from '../components/AutoDiscoveryModal';
+import DonationLaunch from '../components/DonationLaunch';
 
 const MainScreen = React.forwardRef((props, ref) => {
   const AddComputerModalReference = React.useRef();
+  const AutoAddModalReference = React.useRef();
   const AutoAddComputerModalReference = React.useRef();
   const EnlargedFrameBufferReference = React.useRef();
   const FeatureImplementationReference = React.useRef();
   const FeatureGenericModalReference = React.useRef();
+  const [hasDonated, setHasDonated] = React.useState(true);
   const [isListEmpty, setListEmpty] = React.useState(true); // fetchComputers
 
   React.useImperativeHandle(ref, () => ({
@@ -51,7 +55,7 @@ const MainScreen = React.forwardRef((props, ref) => {
   }
 
   function handleAutoStartModalRequest() {
-
+    AutoAddModalReference.current.requestModalVisibility(true);
   }
 
   function handleFullScreenRequest(APIKey, connectionAddress) {
@@ -81,16 +85,30 @@ const MainScreen = React.forwardRef((props, ref) => {
   });
 
   return (
-    <Provider theme={monitoringTheme}>
-      <ConfiguredLaunch
-        enlargeDisplay={handleFullScreenRequest}
-        actionsRequest={handleActionsRequest}
-        style={{
-          flexGrow: 1,
-          minHeight: '100%',
-          display: (isListEmpty == false ? 'flex' : 'none'),
-        }}
-      />
+    <Provider theme={hasDonated === true ? monitoringProTheme : monitoringTheme}>
+      {(hasDonated === true)
+        ? (
+          <DonationLaunch
+            enlargeDisplay={handleFullScreenRequest}
+            actionsRequest={handleActionsRequest}
+            style={{
+              flexGrow: 1,
+              minHeight: '100%',
+              display: (isListEmpty === false ? 'flex' : 'none'),
+            }}
+          />
+        )
+        : (
+          <ConfiguredLaunch
+            enlargeDisplay={handleFullScreenRequest}
+            actionsRequest={handleActionsRequest}
+            style={{
+              flexGrow: 1,
+              minHeight: '100%',
+              display: (isListEmpty === false ? 'flex' : 'none'),
+            }}
+          />
+        )}
 
       <FirstLaunch
         navigation={props.navigation}
@@ -99,22 +117,25 @@ const MainScreen = React.forwardRef((props, ref) => {
           flexGrow: 1,
           alignItems: 'center',
           justifyContent: 'center',
-          display: (isListEmpty == true ? 'flex' : 'none'),
+          display: (isListEmpty === true ? 'flex' : 'none'),
         }}
       />
 
-      <AutoDiscoveryRequest 
-        autoAdd={handleAutoStartModalRequest} 
-        manualAdd={handleAddModalRequest} 
-        ref={AutoAddComputerModalReference} 
+      <AutoDiscoveryRequest
+        autoAdd={handleAutoStartModalRequest}
+        manualAdd={handleAddModalRequest}
+        theme={hasDonated === true ? monitoringProTheme : monitoringTheme}
+        ref={AutoAddComputerModalReference}
       />
-      <AddComputer navigation={props.navigation} ref={AddComputerModalReference} />
+      <AddComputer navigation={props.navigation} theme={hasDonated === true ? monitoringProTheme : monitoringTheme} ref={AddComputerModalReference} />
+      <AutoDiscoveryModal theme={hasDonated === true ? monitoringProTheme : monitoringTheme} ref={AutoAddModalReference} />
       <FeatureImplementation
+        theme={hasDonated === true ? monitoringProTheme : monitoringTheme}
         genericModalToggle={handleGenericModalToggle}
         ref={FeatureImplementationReference}
       />
-      <FeatureGenericModal ref={FeatureGenericModalReference} />
-      <EnlargedFrameBuffer ref={EnlargedFrameBufferReference} />
+      <FeatureGenericModal theme={hasDonated === true ? monitoringProTheme : monitoringTheme} ref={FeatureGenericModalReference} />
+      <EnlargedFrameBuffer theme={hasDonated === true ? monitoringProTheme : monitoringTheme} ref={EnlargedFrameBufferReference} />
     </Provider>
   );
 });

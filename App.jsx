@@ -18,19 +18,23 @@
 
 import React from 'react';
 import { Provider as PaperProvider } from 'react-native-paper';
-import ApplicationInterface from './appsource/screens/ApplicationInterface';
 import { NativeBaseProvider } from 'native-base';
 import { StatusBar } from 'expo-status-bar';
-import { navigationTheme, monitoringTheme } from './appsource/themes/bubblegum';
+import ApplicationInterface from './appsource/screens/ApplicationInterface';
+import {
+  navigationTheme, monitoringTheme, monitoringProTheme, navigationProTheme,
+} from './appsource/themes/bubblegum';
 
 export default function App() {
+  const [hasDonated, setHasDonated] = React.useState(true);
+
   return (
     <NativeBaseProvider>
-      <PaperProvider theme={monitoringTheme}>
-        <ApplicationInterface navigationtheme={navigationTheme}></ApplicationInterface>
+      <PaperProvider theme={hasDonated === true ? monitoringProTheme : monitoringTheme}>
+        <ApplicationInterface navigationtheme={hasDonated === true ? navigationProTheme : navigationTheme} />
       </PaperProvider>
 
-      <StatusBar style="inverted" backgroundColor="#bc245d" translucent={false}></StatusBar>
+      <StatusBar style="auto" backgroundColor={hasDonated === true ? monitoringProTheme.colors.primary : monitoringTheme.colors.primary} translucent={false} />
     </NativeBaseProvider>
   );
 }

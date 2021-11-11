@@ -38,9 +38,20 @@ const AddonFeaturePage = () => (
   </ScrollView>
 );
 
+const AddonAvailableFeaturePage = () => (
+  <ScrollView contentContainerStyle={{ alignItems: 'center', justifyContent: 'center', minHeight: '90%' }}>
+    <FastImage
+      style={{ width: 100, height: 100 }}
+      source={computerDisplayTheme.underConstruction}
+    />
+    <Title style={{ textAlign: 'center' }}>Thank You for Donating!</Title>
+    <Caption style={{ textAlign: 'center' }}>Auto Discovery Feature has been Enabled. You can Discover Veyon Servers in your Network by using the Discover Computers Button.</Caption>
+  </ScrollView>
+);
+
 const AutoDiscoveryRequest = React.forwardRef((props, ref) => {
   const [visible, setVisible] = React.useState(false);
-  const [hasDonated, setHasDonated] = React.useState(false);
+  const [hasDonated, setHasDonated] = React.useState(true);
 
   React.useImperativeHandle(ref, () => ({
     requestModalVisibility() {
@@ -69,17 +80,17 @@ const AutoDiscoveryRequest = React.forwardRef((props, ref) => {
   }
 
   React.useEffect(() => {
-    fetchMiscKey('@license', (licenseKey) => {
+    /* fetchMiscKey('@license', (licenseKey) => {
       if (licenseKey == null || licenseKey.trim() === '') {
         setHasDonated(false);
       } else {
         setHasDonated(true);
       }
-    });
+    }); */
   }, []);
 
   return (
-    <Provider theme={monitoringTheme}>
+    <Provider theme={props.theme}>
       <Portal>
         <Dialog
           visible={visible}
@@ -89,7 +100,7 @@ const AutoDiscoveryRequest = React.forwardRef((props, ref) => {
           <Dialog.Title>Auto Discovery Feature</Dialog.Title>
           <Dialog.ScrollArea style={{ maxHeight: '90%' }}>
             <ScrollView contentContainerStyle={{ alignItems: 'center', justifyContent: 'center', minHeight: '90%' }}>
-              <AddonFeaturePage />
+              {hasDonated === true ? <AddonAvailableFeaturePage /> : <AddonFeaturePage />}
             </ScrollView>
           </Dialog.ScrollArea>
           <Dialog.Actions>
