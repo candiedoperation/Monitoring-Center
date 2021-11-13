@@ -1,3 +1,4 @@
+![Logo](https://github.com/candiedoperation/Monitoring-Center/blob/d1c53dc83c09742a88c10b10c6988050865e4ce6/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png)
 # Monitoring Center
 An Android and iOS Application for [Veyon](https://veyon.io)
 
