@@ -52,10 +52,10 @@ const ApplicationInterface = (props) => {
           ),
         }}
       >
-        <Drawer.Screen name="Computers" children={(props_internal) => (<MainScreen {...props_internal} donationLevel={props.donationLevel} ref={MainScreenReference} />)} />
+        <Drawer.Screen name="Computers" children={(props_internal) => (<MainScreen {...props_internal} donationLevel={props.donationLevel} donationModalRequest={props.donationModalRequest} ref={MainScreenReference} />)} />
         <Drawer.Screen name="Settings" component={SettingsScreen} />
         <Drawer.Screen name="Help" component={HelpScreen} />
-        <Drawer.Screen name="About Application" component={AboutScreen} />
+        <Drawer.Screen name="About Application" children={(props_internal) => (<AboutScreen {...props_internal} donationModalRequest={props.donationModalRequest} />)} />
       </Drawer.Navigator>
     </NavigationContainer>
   );

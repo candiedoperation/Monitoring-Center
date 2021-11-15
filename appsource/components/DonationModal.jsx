@@ -20,13 +20,17 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import {
-  Dialog, Portal, Button, Provider,
+  Dialog, Portal, Button,
 } from 'react-native-paper';
-import { ScrollView, Flex } from 'native-base';
-import { startDefaultDiscovery } from '../controllers/AutoDiscoveryController';
+import { ScrollView } from 'native-base';
+import WebView from 'react-native-webview';
+import { fetchMiscKey } from '../controllers/StorageController';
+import prodKeys from '../controllers/ProductionController';
 
 const DonationModal = React.forwardRef((props, ref) => {
   const [visible, setVisible] = React.useState(false);
+  const [webViewURL, setWebViewURL] = React.useState(prodKeys.donatePage);
+  const [modalTitle, setModalTitle] = React.useState('Donate');
 
   React.useImperativeHandle(ref, () => ({
     requestModalVisibility() {
@@ -41,31 +45,42 @@ const DonationModal = React.forwardRef((props, ref) => {
   };
 
   React.useEffect(() => {
-    if (visible === true) {
-      startDefaultDiscovery(() => {
-
-      });
-    }
+    fetchMiscKey('@patreonData', (patreonData) => {
+      if (patreonData != null) {
+        // eslint-disable-next-line no-param-reassign
+        setModalTitle('Choose a Donation Tier');
+        setWebViewURL(prodKeys.donatePage);
+      } else {
+        setModalTitle('Link your Patreon Account');
+        setWebViewURL(prodKeys.pateronAPILink);
+      }
+    });
   }, [visible]);
 
   return (
-    <Provider theme={props.theme}>
-      <Portal>
-        <Dialog
-          visible={visible}
-          onDismiss={() => { setVisible(false); }}
-          contentContainerStyle={modalStyle}
-        >
-          <Dialog.Title>Donate</Dialog.Title>
-          <Dialog.ScrollArea style={{ maxHeight: '85%' }}>
-            <ScrollView />
-          </Dialog.ScrollArea>
-          <Dialog.Actions>
-            <Button onPress={() => { setVisible(false); }}>Cancel</Button>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
-    </Provider>
+    <Portal>
+      <Dialog
+        visible={visible}
+        onDismiss={() => { setVisible(false); }}
+        contentContainerStyle={modalStyle}
+      >
+        <Dialog.Title>{modalTitle}</Dialog.Title>
+        <Dialog.ScrollArea style={{ height: '85%', paddingLeft: 0, paddingRight: 0 }}>
+          <ScrollView contentContainerStyle={{ flex: 1 }}>
+            <WebView
+              source={{ uri: webViewURL }}
+              style={{ flex: 1 }}
+              javaScriptEnabled
+              domStorageEnabled
+              startInLoadingState={false}
+            />
+          </ScrollView>
+        </Dialog.ScrollArea>
+        <Dialog.Actions>
+          <Button onPress={() => { setVisible(false); }}>Cancel</Button>
+        </Dialog.Actions>
+      </Dialog>
+    </Portal>
   );
 });
 

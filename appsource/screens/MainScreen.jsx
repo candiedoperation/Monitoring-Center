@@ -17,6 +17,7 @@
 */
 
 /* eslint-disable react/jsx-no-bind */
+/* eslint-disable react/prop-types */
 import React from 'react';
 import { Provider } from 'react-native-paper';
 import AddComputer from '../components/AddComputer';
@@ -39,11 +40,17 @@ const MainScreen = React.forwardRef((props, ref) => {
   const FeatureImplementationReference = React.useRef();
   const FeatureGenericModalReference = React.useRef();
   const [isListEmpty, setListEmpty] = React.useState(true); // fetchComputers
+  const [renderUUID, requestReRender] = React.useState(0);
+  const getRandomId = () => parseInt(Math.random() * 100, 10);
 
   React.useImperativeHandle(ref, () => ({
     requestShowAutoAddComputerDialog() {
       // eslint-disable-next-line no-use-before-define
       handleAutoAddModalRequest();
+    },
+    requestDataRefresh() {
+      // eslint-disable-next-line no-use-before-define
+      requestMainScreenRefresh();
     },
   }));
 
@@ -67,6 +74,12 @@ const MainScreen = React.forwardRef((props, ref) => {
     FeatureImplementationReference.current.requestModalVisibility(connectionData);
   }
 
+  function requestMainScreenRefresh() {
+    // eslint-disable-next-line no-console
+    console.log('Main Screen ReRender Requested');
+    requestReRender(getRandomId());
+  }
+
   function handleGenericModalToggle(featureID, featureData, internalConnectionData) {
     FeatureGenericModalReference.current.requestModalVisibility(
       featureID,
@@ -77,13 +90,17 @@ const MainScreen = React.forwardRef((props, ref) => {
 
   setPrivateKey('atheesh', '<PRIVATE-KEY>', () => { }, () => { });
 
-  fetchComputers((computerList) => {
-    if (Object.keys(computerList).length !== 0) {
-      setListEmpty(false);
-    } else {
-      setListEmpty(true);
-    }
-  });
+  React.useEffect(() => {
+    // eslint-disable-next-line no-console
+    console.warn('Checking State and Replacing');
+    fetchComputers((computerList) => {
+      if (Object.keys(computerList).length !== 0) {
+        setListEmpty(false);
+      } else {
+        setListEmpty(true);
+      }
+    });
+  }, [renderUUID]);
 
   return (
     <Provider theme={props.donationLevel > 1 ? monitoringProTheme : monitoringTheme}>
@@ -93,6 +110,7 @@ const MainScreen = React.forwardRef((props, ref) => {
             donationLevel={props.donationLevel}
             enlargeDisplay={handleFullScreenRequest}
             actionsRequest={handleActionsRequest}
+            renderUUID={renderUUID}
             style={{
               flexGrow: 1,
               minHeight: '100%',
@@ -103,8 +121,10 @@ const MainScreen = React.forwardRef((props, ref) => {
         : (
           <ConfiguredLaunch
             donationLevel={props.donationLevel}
+            donationModalRequest={props.donationModalRequest}
             enlargeDisplay={handleFullScreenRequest}
             actionsRequest={handleActionsRequest}
+            renderUUID={renderUUID}
             style={{
               flexGrow: 1,
               minHeight: '100%',
@@ -116,7 +136,8 @@ const MainScreen = React.forwardRef((props, ref) => {
       <FirstLaunch
         donationLevel={props.donationLevel}
         navigation={props.navigation}
-        requestAddComputerModal={handleAddModalRequest}
+        requestAddComputerModal={handleAutoAddModalRequest}
+        renderUUID={renderUUID}
         style={{
           flexGrow: 1,
           alignItems: 'center',
@@ -136,6 +157,7 @@ const MainScreen = React.forwardRef((props, ref) => {
         donationLevel={props.donationLevel}
         navigation={props.navigation}
         theme={props.donationLevel > 1 ? monitoringProTheme : monitoringTheme}
+        requestRefresh={requestMainScreenRefresh}
         ref={AddComputerModalReference}
       />
       <AutoDiscoveryModal
@@ -147,6 +169,7 @@ const MainScreen = React.forwardRef((props, ref) => {
         donationLevel={props.donationLevel}
         theme={props.donationLevel > 1 ? monitoringProTheme : monitoringTheme}
         genericModalToggle={handleGenericModalToggle}
+        requestRefresh={requestMainScreenRefresh}
         ref={FeatureImplementationReference}
       />
       <FeatureGenericModal

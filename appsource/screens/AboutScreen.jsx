@@ -16,6 +16,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+/* eslint-disable react/prop-types */
 import React from 'react';
 import { Flex, ScrollView } from 'native-base';
 import { Linking } from 'react-native';
@@ -25,12 +26,12 @@ import {
 import LicenseInformation from '../components/AppLicense';
 import prodKeys from '../controllers/ProductionController';
 
-const AboutScreen = () => (
+const AboutScreen = (props) => (
   <Flex style={{ padding: 8 }}>
     <Card style={{ maxHeight: '100%' }}>
       <Card.Title title="Monitoring Center" subtitle="Copyright © 2021  Atheesh Thirumalairajan" />
       <Card.Actions style={{ flexDirection: 'row-reverse', marginBottom: 3 }}>
-        <Button mode="contained" style={{ marginRight: 10, marginLeft: 10 }} onPress={() => { Linking.openURL(prodKeys.donatePage); }}>Donate</Button>
+        <Button mode="contained" style={{ marginRight: 10, marginLeft: 10 }} onPress={props.donationModalRequest}>Donate</Button>
         <Button mode="outlined" onPress={() => { Linking.openURL(prodKeys.sourceURL); }}>View Source</Button>
       </Card.Actions>
       <Card.Content>

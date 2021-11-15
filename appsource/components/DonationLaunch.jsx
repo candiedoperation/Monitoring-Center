@@ -28,8 +28,6 @@ import DonationPerkBanner from './DonationPerkBanner';
 
 const DonationLaunch = (props) => {
   const [configuredComputers, setConfiguredComputers] = React.useState([]);
-  const [renderUUID, requestReRender] = React.useState(0);
-  const getRandomId = () => parseInt(Math.random() * 100, 10);
 
   React.useEffect(() => {
     fetchComputers((computersList) => {
@@ -53,7 +51,7 @@ const DonationLaunch = (props) => {
 
       setConfiguredComputers(configuredComputers);
     });
-  }, [renderUUID]);
+  }, [props.renderUUID]);
 
   return (
     <Flex>

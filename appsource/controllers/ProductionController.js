@@ -17,10 +17,10 @@
 */
 
 const prodKeys = {
-  pateronAPISecret: '',
+  pateronAPILink: 'https://www.patreon.com/oauth2/authorize?client_id=2-NS2VMT4C1DK2plbNVCw76IZLm_HZfjjMoEZiV6dfC6A7R_MnQrfYS9GRs-HNE4&response_type=code&redirect_uri=http://192.168.30.217:3000/oauth/monitoring-center&state=deviceuuid',
   donatePage: 'https://patreon.com/atheesh',
   sourceURL: 'https://github.com/candiedoperation/Monitoring-Center',
-  donationServer: 'http://localhost:3000',
+  donationServer: 'http://192.168.30.217:3000',
 };
 
 export default prodKeys;

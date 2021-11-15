@@ -17,6 +17,7 @@
 */
 
 /* eslint-disable react/style-prop-object */
+/* eslint-disable react/jsx-no-bind */
 import React from 'react';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { NativeBaseProvider } from 'native-base';
@@ -26,11 +27,17 @@ import ApplicationInterface from './appsource/screens/ApplicationInterface';
 import {
   navigationTheme, monitoringTheme, monitoringProTheme, navigationProTheme,
 } from './appsource/themes/bubblegum';
+import DonationModal from './appsource/components/DonationModal';
 import { fetchMiscKey } from './appsource/controllers/StorageController';
 import prodKeys from './appsource/controllers/ProductionController';
 
 export default function App() {
   const [donationLevel, setDonationLevel] = React.useState(0);
+  const DonationModalReference = React.useRef();
+
+  function handleDonationModalRequest() {
+    DonationModalReference.current.requestModalVisibility();
+  }
 
   function InitializeApplication() {
     fetchMiscKey('@patreonData', (patreonData) => {
@@ -59,7 +66,13 @@ export default function App() {
       <PaperProvider theme={donationLevel > 1 ? monitoringProTheme : monitoringTheme}>
         <ApplicationInterface
           donationLevel={donationLevel}
+          donationModalRequest={handleDonationModalRequest}
           navigationtheme={donationLevel > 1 ? navigationProTheme : navigationTheme}
+        />
+
+        {/* Universal Modals */}
+        <DonationModal
+          ref={DonationModalReference}
         />
       </PaperProvider>
       <StatusBar style="auto" backgroundColor={donationLevel > 1 ? monitoringProTheme.colors.primary : monitoringTheme.colors.primary} translucent={false} />

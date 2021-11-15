@@ -32,8 +32,6 @@ import { computerDisplayTheme } from '../themes/bubblegum';
 const ConfiguredLaunch = (props) => {
   const [configuredComputers, setConfiguredComputers] = useState([]);
   const [dialogVisible, setDialogVisible] = React.useState(false);
-  const [renderUUID, requestReRender] = useState(0);
-  const getRandomId = () => parseInt(Math.random() * 100, 10);
 
   React.useEffect(() => {
     fetchComputers((computersList) => {
@@ -56,7 +54,7 @@ const ConfiguredLaunch = (props) => {
 
       setConfiguredComputers(configuredComputers);
     });
-  }, [renderUUID]);
+  }, [props.renderUUID]);
 
   React.useState(() => {
     if (props.donationLevel == 0) {
@@ -93,7 +91,7 @@ const ConfiguredLaunch = (props) => {
           </Dialog.ScrollArea>
           <Dialog.Actions>
             <Button style={{ margin: 3 }} onPress={() => { setDialogVisible(false); }}>Close</Button>
-            <Button style={{ margin: 3 }} onPress={props.donationRequest} mode="contained">Donate</Button>
+            <Button style={{ margin: 3 }} onPress={() => { props.donationModalRequest(); setDialogVisible(false); }} mode="contained">Donate</Button>
           </Dialog.Actions>
         </Dialog>
       </Portal>
