@@ -16,14 +16,15 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-console */
 /* eslint-disable react/prop-types */
 import React from 'react';
-import { Card, Text } from 'react-native-paper';
-import { Flex, ScrollView, View } from 'native-base';
+import { Flex, ScrollView } from 'native-base';
 import ComputerDisplay from './ComputerDisplay';
 import { fetchComputers } from '../controllers/StorageController';
+import DonationPerkBanner from './DonationPerkBanner';
 
 const DonationLaunch = (props) => {
   const [configuredComputers, setConfiguredComputers] = React.useState([]);
@@ -56,11 +57,10 @@ const DonationLaunch = (props) => {
 
   return (
     <Flex>
-      <View padding={15}>
-        <Text>You're Helping make Monitoring Center Better Day-by-Day.</Text>
-        <Text>We Thank You for your Generous Donation.</Text>
-      </View>
-      <ScrollView>{configuredComputers}</ScrollView>
+      <ScrollView>
+        <DonationPerkBanner visible={true} />
+        {configuredComputers}
+      </ScrollView>
     </Flex>
   );
 };

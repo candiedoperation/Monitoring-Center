@@ -16,6 +16,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+/* eslint-disable react/jsx-no-bind */
 import React from 'react';
 import { Provider } from 'react-native-paper';
 import AddComputer from '../components/AddComputer';
@@ -37,11 +38,11 @@ const MainScreen = React.forwardRef((props, ref) => {
   const EnlargedFrameBufferReference = React.useRef();
   const FeatureImplementationReference = React.useRef();
   const FeatureGenericModalReference = React.useRef();
-  const [hasDonated, setHasDonated] = React.useState(true);
   const [isListEmpty, setListEmpty] = React.useState(true); // fetchComputers
 
   React.useImperativeHandle(ref, () => ({
     requestShowAutoAddComputerDialog() {
+      // eslint-disable-next-line no-use-before-define
       handleAutoAddModalRequest();
     },
   }));
@@ -77,7 +78,7 @@ const MainScreen = React.forwardRef((props, ref) => {
   setPrivateKey('atheesh', '<PRIVATE-KEY>', () => { }, () => { });
 
   fetchComputers((computerList) => {
-    if (Object.keys(computerList).length != 0) {
+    if (Object.keys(computerList).length !== 0) {
       setListEmpty(false);
     } else {
       setListEmpty(true);
@@ -85,10 +86,11 @@ const MainScreen = React.forwardRef((props, ref) => {
   });
 
   return (
-    <Provider theme={hasDonated === true ? monitoringProTheme : monitoringTheme}>
-      {(hasDonated === true)
+    <Provider theme={props.donationLevel > 1 ? monitoringProTheme : monitoringTheme}>
+      {(props.donationLevel > 1)
         ? (
           <DonationLaunch
+            donationLevel={props.donationLevel}
             enlargeDisplay={handleFullScreenRequest}
             actionsRequest={handleActionsRequest}
             style={{
@@ -100,6 +102,7 @@ const MainScreen = React.forwardRef((props, ref) => {
         )
         : (
           <ConfiguredLaunch
+            donationLevel={props.donationLevel}
             enlargeDisplay={handleFullScreenRequest}
             actionsRequest={handleActionsRequest}
             style={{
@@ -111,6 +114,7 @@ const MainScreen = React.forwardRef((props, ref) => {
         )}
 
       <FirstLaunch
+        donationLevel={props.donationLevel}
         navigation={props.navigation}
         requestAddComputerModal={handleAddModalRequest}
         style={{
@@ -122,20 +126,38 @@ const MainScreen = React.forwardRef((props, ref) => {
       />
 
       <AutoDiscoveryRequest
+        donationLevel={props.donationLevel}
         autoAdd={handleAutoStartModalRequest}
         manualAdd={handleAddModalRequest}
-        theme={hasDonated === true ? monitoringProTheme : monitoringTheme}
+        theme={props.donationLevel > 1 ? monitoringProTheme : monitoringTheme}
         ref={AutoAddComputerModalReference}
       />
-      <AddComputer navigation={props.navigation} theme={hasDonated === true ? monitoringProTheme : monitoringTheme} ref={AddComputerModalReference} />
-      <AutoDiscoveryModal theme={hasDonated === true ? monitoringProTheme : monitoringTheme} ref={AutoAddModalReference} />
+      <AddComputer
+        donationLevel={props.donationLevel}
+        navigation={props.navigation}
+        theme={props.donationLevel > 1 ? monitoringProTheme : monitoringTheme}
+        ref={AddComputerModalReference}
+      />
+      <AutoDiscoveryModal
+        donationLevel={props.donationLevel}
+        theme={props.donationLevel > 1 ? monitoringProTheme : monitoringTheme}
+        ref={AutoAddModalReference}
+      />
       <FeatureImplementation
-        theme={hasDonated === true ? monitoringProTheme : monitoringTheme}
+        donationLevel={props.donationLevel}
+        theme={props.donationLevel > 1 ? monitoringProTheme : monitoringTheme}
         genericModalToggle={handleGenericModalToggle}
         ref={FeatureImplementationReference}
       />
-      <FeatureGenericModal theme={hasDonated === true ? monitoringProTheme : monitoringTheme} ref={FeatureGenericModalReference} />
-      <EnlargedFrameBuffer theme={hasDonated === true ? monitoringProTheme : monitoringTheme} ref={EnlargedFrameBufferReference} />
+      <FeatureGenericModal
+        donationLevel={props.donationLevel}
+        theme={props.donationLevel > 1 ? monitoringProTheme : monitoringTheme}
+        ref={FeatureGenericModalReference}
+      />
+      <EnlargedFrameBuffer
+        theme={props.donationLevel > 1 ? monitoringProTheme : monitoringTheme}
+        ref={EnlargedFrameBufferReference}
+      />
     </Provider>
   );
 });

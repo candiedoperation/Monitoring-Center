@@ -38,6 +38,7 @@ const ApplicationInterface = (props) => {
           header: (props) => (
             <AppBar
               {...props}
+              donationLevel={props.donationLevel}
               onUserAddServiceRequest={() => {
                 MainScreenReference.current.requestShowAutoAddComputerDialog();
               }}
@@ -51,7 +52,7 @@ const ApplicationInterface = (props) => {
           ),
         }}
       >
-        <Drawer.Screen name="Computers" children={(props) => <MainScreen {...props} ref={MainScreenReference} />} />
+        <Drawer.Screen name="Computers" children={(props_internal) => (<MainScreen {...props_internal} donationLevel={props.donationLevel} ref={MainScreenReference} />)} />
         <Drawer.Screen name="Settings" component={SettingsScreen} />
         <Drawer.Screen name="Help" component={HelpScreen} />
         <Drawer.Screen name="About Application" component={AboutScreen} />

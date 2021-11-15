@@ -25,6 +25,7 @@ import {
 import { ScrollView, Flex } from 'native-base';
 import { monitoringTheme } from '../themes/bubblegum';
 import DiscoveredComputer from './DiscoveredComputer';
+import { startDefaultDiscovery } from '../controllers/AutoDiscoveryController';
 
 const AutoDiscoveryModal = React.forwardRef((props, ref) => {
   const [visible, setVisible] = React.useState(false);
@@ -42,8 +43,12 @@ const AutoDiscoveryModal = React.forwardRef((props, ref) => {
     margin: 15,
   };
 
-  React.useState(() => {
-    
+  React.useEffect(() => {
+    if (visible === true) {
+      startDefaultDiscovery(() => {
+
+      });
+    }
   }, [visible]);
 
   return (
@@ -66,7 +71,7 @@ const AutoDiscoveryModal = React.forwardRef((props, ref) => {
             </ScrollView>
           </Dialog.ScrollArea>
           <Dialog.Actions>
-            <Button>Cancel</Button>
+            <Button onPress={() => { setVisible(false); }}>Cancel</Button>
             <Button
               mode="contained"
               style={{ marginLeft: 5 }}
