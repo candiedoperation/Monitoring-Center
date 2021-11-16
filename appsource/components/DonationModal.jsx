@@ -21,16 +21,19 @@
 import React from 'react';
 import {
   Dialog, Portal, Button,
+  Title, Caption, Snackbar,
 } from 'react-native-paper';
 import { ScrollView } from 'native-base';
-import WebView from 'react-native-webview';
-import { fetchMiscKey } from '../controllers/StorageController';
+import InAppBrowser from 'react-native-inappbrowser-reborn';
+import FastImage from 'react-native-fast-image';
+import { fetchMiscKey, setMiscKey } from '../controllers/StorageController';
 import prodKeys from '../controllers/ProductionController';
+import { computerDisplayTheme } from '../themes/bubblegum';
 
 const DonationModal = React.forwardRef((props, ref) => {
   const [visible, setVisible] = React.useState(false);
-  const [webViewURL, setWebViewURL] = React.useState(prodKeys.donatePage);
   const [modalTitle, setModalTitle] = React.useState('Donate');
+  const [snackBarVisible, setSnackBarVisible] = React.useState(false);
 
   React.useImperativeHandle(ref, () => ({
     requestModalVisibility() {
@@ -44,16 +47,69 @@ const DonationModal = React.forwardRef((props, ref) => {
     margin: 15,
   };
 
+  function parseQueryURL(queryURL) {
+    const paramsJSON = {};
+    let strippedQueryURL = queryURL.split('/').pop();
+
+    strippedQueryURL = strippedQueryURL
+      .substring(
+        (strippedQueryURL.indexOf('?') + 1),
+        strippedQueryURL.length,
+      )
+      .split('&');
+
+    strippedQueryURL.forEach((parameter) => {
+      // eslint-disable-next-line prefer-destructuring
+      paramsJSON[parameter.split('=')[0]] = parameter.split('=')[1];
+    });
+
+    return paramsJSON;
+  }
+
   React.useEffect(() => {
     fetchMiscKey('@patreonData', (patreonData) => {
-      if (patreonData != null) {
-        // eslint-disable-next-line no-param-reassign
-        setModalTitle('Choose a Donation Tier');
-        setWebViewURL(prodKeys.donatePage);
-      } else {
-        setModalTitle('Link your Patreon Account');
-        setWebViewURL(prodKeys.pateronAPILink);
-      }
+      setTimeout(() => {
+        if (patreonData != null) {
+          // eslint-disable-next-line no-param-reassign
+          setModalTitle('Choose a Donation Tier');
+          if (visible) {
+            InAppBrowser
+              .isAvailable()
+              .then(() => {
+                InAppBrowser.open(prodKeys.donatePage, {
+                  enableDefaultShare: false,
+                  forceCloseOnRedirection: false,
+                }).then((response) => {
+                  // Check with Donations Server
+                  setVisible(false);
+                }).catch((err) => { console.error(err); });
+              });
+          }
+        } else {
+          setModalTitle('Link your Patreon Account');
+          if (visible) {
+            InAppBrowser
+              .isAvailable()
+              .then(() => {
+                InAppBrowser.openAuth(prodKeys.pateronAPILink, prodKeys.appSchemeURL, {
+                  enableDefaultShare: false,
+                  forceCloseOnRedirection: false,
+                }).then((response) => {
+                  if (response.type === 'success' && response.url) {
+                    setMiscKey('@patreonData', JSON.stringify(parseQueryURL(response.url)), () => {
+                      setVisible(false);
+                      setVisible(true);
+                    });
+                  } else {
+                    // eslint-disable-next-line no-alert
+                    setVisible(false);
+                    setSnackBarVisible(true);
+                  }
+                });
+              });
+          }
+        }
+      }, 700);
     });
   }, [visible]);
 
@@ -65,21 +121,32 @@ const DonationModal = React.forwardRef((props, ref) => {
         contentContainerStyle={modalStyle}
       >
         <Dialog.Title>{modalTitle}</Dialog.Title>
-        <Dialog.ScrollArea style={{ height: '85%', paddingLeft: 0, paddingRight: 0 }}>
-          <ScrollView contentContainerStyle={{ flex: 1 }}>
-            <WebView
-              source={{ uri: webViewURL }}
-              style={{ flex: 1 }}
-              javaScriptEnabled
-              domStorageEnabled
-              startInLoadingState={false}
+        <Dialog.ScrollArea style={{ maxHeight: '85%' }}>
+          <ScrollView contentContainerStyle={{ alignItems: 'center', justifyContent: 'center', minHeight: '85%' }}>
+            <FastImage
+              style={{ width: 100, height: 100, marginBottom: 10 }}
+              source={computerDisplayTheme.externalConnect}
             />
+            <Title style={{ textAlign: 'center' }}>Connecting You to Patreon</Title>
+            <Caption style={{ textAlign: 'center' }}>Please Wait while I securely connect you to Patreon</Caption>
           </ScrollView>
         </Dialog.ScrollArea>
         <Dialog.Actions>
           <Button onPress={() => { setVisible(false); }}>Cancel</Button>
         </Dialog.Actions>
       </Dialog>
+      <Snackbar
+        visible={snackBarVisible}
+        onDismiss={() => { setSnackBarVisible(false); }}
+        action={{
+          label: 'Try Again',
+          onPress: () => {
+            setVisible(true);
+          },
+        }}
+      >
+        Error Linking App to Patreon
+      </Snackbar>
     </Portal>
   );
 });

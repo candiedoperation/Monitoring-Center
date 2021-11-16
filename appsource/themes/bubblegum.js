@@ -74,6 +74,7 @@ const computerDisplayTheme = {
   frameBufferIndeterminate: require('./indeterminateFrame.png'),
   underConstruction: require('./constructionBoard.png'),
   donateRequest: require('./donateRequest.png'),
+  externalConnect: require('./connectExternal.png'),
 };
 
 export {
