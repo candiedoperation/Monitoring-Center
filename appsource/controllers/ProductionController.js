@@ -17,12 +17,12 @@
 */
 
 const prodKeys = {
-  pateronAPILink: 'https://www.patreon.com/oauth2/authorize?client_id=2-NS2VMT4C1DK2plbNVCw76IZLm_HZfjjMoEZiV6dfC6A7R_MnQrfYS9GRs-HNE4&response_type=code&redirect_uri=http://192.168.30.217:3000/oauth/monitoring-center&state=deviceuuid',
+  pateronAPILink: 'https://www.patreon.com/oauth2/authorize?client_id=2-NS2VMT4C1DK2plbNVCw76IZLm_HZfjjMoEZiV6dfC6A7R_MnQrfYS9GRs-HNE4&response_type=code&redirect_uri=https://donations.freeddns.org/oauth/monitoring-center&state=deviceuuid',
   patreonWhiteList: 'https://www.patreon.com',
   appSchemeURL: 'monitoringcenter://connect/patreon',
   donatePage: 'https://patreon.com/atheesh',
   sourceURL: 'https://github.com/candiedoperation/Monitoring-Center',
-  donationServer: 'http://192.168.30.217:3000',
+  donationServer: 'https://donations.freeddns.org',
 };
 
 export default prodKeys;

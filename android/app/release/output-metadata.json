@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "tk.cyberphase.monitoringcenter",
+  "applicationId": "atheesh.apps.monitoringcenter",
   "variantName": "processReleaseResources",
   "elements": [
     {
