@@ -59,6 +59,10 @@ export default function App() {
         }).catch((error) => {
           console.error(error);
         });
+      } else {
+        setMiscKey('@dlevel', '0', () => {
+          setDonationLevel(0);
+        });
       }
     });
   }
