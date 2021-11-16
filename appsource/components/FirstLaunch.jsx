@@ -18,23 +18,19 @@
 
 import React from 'react';
 import { Button, Title, Avatar } from 'react-native-paper';
-import { Center, Flex, NativeBaseProvider, ScrollView } from 'native-base';
+import { Flex, ScrollView } from 'native-base';
 
-const FirstLaunch = (props) => {
-    return (
-        <ScrollView
-            align="center"
-            justify="center"
-            contentContainerStyle={props.style}
-        >
-            <Avatar.Icon size={128} backgroundColor="transparent" color="#bc245d" icon="devices" />
-            <Title style={{ marginBottom: 10 }}>It's Empty in Here…</Title>
-            <Flex>
-                <Button style={{ margin: 5 }} icon="plus" mode="contained" onPress={props.requestAddComputerModal}>Add a Computer</Button>
-                <Button style={{ margin: 5 }} mode="outlined" onPress={() => props.navigation.navigate('Help')}>Need Help ?</Button>
-            </Flex>
-        </ScrollView>
-    );
-}
+const FirstLaunch = (props) => (
+  <ScrollView contentContainerStyle={{ height: '100%' }}>
+    <Flex height="90%" alignItems="center" justifyContent="center">
+      <Avatar.Icon size={128} backgroundColor="transparent" color="#bc245d" icon="devices" />
+      <Title style={{ marginBottom: 10 }}>It's Empty in Here…</Title>
+      <Flex>
+        <Button style={{ margin: 5 }} icon="plus" mode="contained" onPress={props.requestAddComputerModal}>Add a Computer</Button>
+        <Button style={{ margin: 5 }} mode="outlined" onPress={() => props.navigation.navigate('Help')}>Need Help ?</Button>
+      </Flex>
+    </Flex>
+  </ScrollView>
+);
 
 export default FirstLaunch;

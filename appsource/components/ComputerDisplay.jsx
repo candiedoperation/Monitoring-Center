@@ -89,7 +89,7 @@ const ComputerDisplay = (props) => {
           setComputerTitle('Live View');
         });
 
-        if (frameBufferURL == '') { setInterval(getFrameBuffer, 3000); }
+        if (frameBufferURL == '') { frameBufferInterval = setInterval(getFrameBuffer, 3000); }
       })
       .catch((error) => {
         setComputerTitle('Authentication Failed');
@@ -126,6 +126,7 @@ const ComputerDisplay = (props) => {
       topURL: `${props.computerAddress.split('/')[0]}//${props.computerAddress.split('/')[2]}`,
       subURL: '/api/v1/feature',
       connectionUid: APIKey.connectionUid,
+      computerUUID: props.computerUUID,
     });
   }
 

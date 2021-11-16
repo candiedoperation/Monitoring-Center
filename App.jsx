@@ -16,21 +16,66 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+/* eslint-disable react/style-prop-object */
+/* eslint-disable react/jsx-no-bind */
 import React from 'react';
 import { Provider as PaperProvider } from 'react-native-paper';
-import ApplicationInterface from './appsource/screens/ApplicationInterface';
 import { NativeBaseProvider } from 'native-base';
 import { StatusBar } from 'expo-status-bar';
-import { navigationTheme, monitoringTheme } from './appsource/themes/bubblegum';
+import axios from 'axios';
+import ApplicationInterface from './appsource/screens/ApplicationInterface';
+import {
+  navigationTheme, monitoringTheme, monitoringProTheme, navigationProTheme,
+} from './appsource/themes/bubblegum';
+import DonationModal from './appsource/components/DonationModal';
+import { fetchMiscKey } from './appsource/controllers/StorageController';
+import prodKeys from './appsource/controllers/ProductionController';
 
 export default function App() {
+  const [donationLevel, setDonationLevel] = React.useState(0);
+  const DonationModalReference = React.useRef();
+
+  function handleDonationModalRequest() {
+    DonationModalReference.current.requestModalVisibility();
+  }
+
+  function InitializeApplication() {
+    fetchMiscKey('@patreonData', (patreonData) => {
+      if (patreonData != null) {
+        // eslint-disable-next-line no-param-reassign
+        patreonData = JSON.parse(patreonData);
+
+        axios.post(
+          `${prodKeys.donationServer}/oauth/monitoring-center/license-status`,
+          { email: patreonData.email },
+        ).then((licenseStatus) => {
+          setDonationLevel(licenseStatus.data.dLevel);
+        }).catch(() => {
+          fetchMiscKey('@dlevel', (dLevel) => {
+            if (dLevel != null) setDonationLevel(dLevel);
+          });
+        });
+      }
+    });
+  }
+
+  InitializeApplication();
+
   return (
     <NativeBaseProvider>
-      <PaperProvider theme={monitoringTheme}>
-        <ApplicationInterface navigationtheme={navigationTheme}></ApplicationInterface>
-      </PaperProvider>
+      <PaperProvider theme={donationLevel > 1 ? monitoringProTheme : monitoringTheme}>
+        <ApplicationInterface
+          donationLevel={donationLevel}
+          donationModalRequest={handleDonationModalRequest}
+          navigationtheme={donationLevel > 1 ? navigationProTheme : navigationTheme}
+        />
 
-      <StatusBar style="inverted" backgroundColor="#bc245d" translucent={false}></StatusBar>
+        {/* Universal Modals */}
+        <DonationModal
+          ref={DonationModalReference}
+        />
+      </PaperProvider>
+      <StatusBar style="auto" backgroundColor={donationLevel > 1 ? monitoringProTheme.colors.primary : monitoringTheme.colors.primary} translucent={false} />
     </NativeBaseProvider>
   );
 }

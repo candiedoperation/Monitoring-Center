@@ -16,6 +16,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+/* eslint-disable react/prop-types */
 import React from 'react';
 import {
   Checkbox, Snackbar, Dialog, Portal, TextInput, Button, Provider, RadioButton, Text, Subheading,
@@ -23,7 +24,6 @@ import {
 import { Box, Flex, ScrollView } from 'native-base';
 import axios from 'axios';
 import Ping from 'react-native-ping';
-import { monitoringTheme } from '../themes/bubblegum';
 import { addComputer } from '../controllers/StorageController';
 
 const AddComputer = React.forwardRef((props, ref) => {
@@ -65,11 +65,11 @@ const AddComputer = React.forwardRef((props, ref) => {
     const serverIP = ((ProxyAddressText != undefined && ProxyAddressText.trim() != '') ? ProxyAddressText.split(':')[0] : IPAddressText.split(':')[0]);
     const serverPort = ((ProxyAddressText != undefined && ProxyAddressText.trim() != '') ? ProxyAddressText.split(':')[1] : IPAddressText.split(':')[1]);
     const serverAddress = (serverIP == IPAddressText.split(':')[0] ? 'localhost' : IPAddressText.split(':')[0]);
-    const addressPort = ((IPAddressText.split(':')[1] != '') ? `:${IPAddressText.split(':')[1]}` : '');
+    const addressPort = ((IPAddressText.split(':')[1] != undefined && IPAddressText.split(':')[1] != '') ? `:${IPAddressText.split(':')[1]}` : ':11100');
     const protocol = (usingHTTPS == true ? 'https' : 'http');
     const requestURL = `${protocol}://${serverIP}:${(serverPort != undefined && serverPort.trim() != '') ? serverPort : '11080'}/api/v1/authentication/${serverAddress}${addressPort}`;
 
-    // console.log(`Requesting: ${requestURL}`);
+    console.log(`Requesting: ${requestURL}`);
     return requestURL;
   };
 
@@ -124,6 +124,7 @@ const AddComputer = React.forwardRef((props, ref) => {
   };
 
   const computerAdditionCompleted = () => {
+    props.requestRefresh();
     setVisible(false);
     setIPAddressText('');
     setProxyAddressText('');
@@ -162,12 +163,12 @@ const AddComputer = React.forwardRef((props, ref) => {
   };
 
   return (
-    <Provider theme={monitoringTheme}>
+    <Provider theme={props.theme}>
       <Portal>
         <Dialog visible={visible} onDismiss={() => { setVisible(false); }} contentContainerStyle={modalStyle}>
           <Dialog.Title>Add a Computer</Dialog.Title>
           <Dialog.ScrollArea>
-            <ScrollView>
+            <ScrollView paddingBottom={5}>
               <TextInput error={connectionError01} value={IPAddressText} disabled={primaryInfoDisabled} onChangeText={handleIPAddressKeyin} mode="outlined" label="Computer Domain or IP Address" />
               <Flex marginTop={3} direction="row" alignItems="center">
                 <Checkbox disabled={primaryInfoDisabled} status={usingProxy ? 'checked' : 'unchecked'} onPress={() => { setUsingProxy(!usingProxy); }} />

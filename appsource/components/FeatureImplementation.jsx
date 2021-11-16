@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 /*
     Monitoring Center
     Copyright (C) 2021  Atheesh Thirumalairajan
@@ -17,14 +16,15 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+/* eslint-disable react/prop-types */
 import React from 'react';
 import {
   List, Dialog, Portal, Button, Provider, ActivityIndicator,
 } from 'react-native-paper';
 import { ScrollView } from 'native-base';
 import axios from 'axios';
-import { monitoringTheme } from '../themes/bubblegum';
 import FeatureAccordition from './FeatureAccordition';
+import { deleteComputer } from '../controllers/StorageController';
 
 const FeatureImplementation = React.forwardRef((props, ref) => {
   const [visible, setVisible] = React.useState(false);
@@ -110,21 +110,29 @@ const FeatureImplementation = React.forwardRef((props, ref) => {
     requestRender(getRandomId());
   }
 
+  function handleDeleteComputer() {
+    deleteComputer(connectionData.computerUUID, () => {
+      setVisible(false);
+      props.requestRefresh();
+    });
+  }
+
   React.useEffect(visible === true ? initializationParams : destructionParams, [visible]);
 
   return (
-    <Provider theme={monitoringTheme}>
+    <Provider theme={props.theme}>
       <Portal>
         <Dialog visible={visible} onDismiss={() => { setVisible(false); }} contentContainerStyle={modalStyle}>
           <Dialog.Title>Available Features</Dialog.Title>
-          <Dialog.ScrollArea style={{ maxHeight: '90%', paddingLeft: 0, paddingRight: 0 }}>
+          <Dialog.ScrollArea style={{ maxHeight: '85%', paddingLeft: 0, paddingRight: 0 }}>
             <ActivityIndicator style={{ margin: 30, display: (availableFeatures.length != 0) ? 'none' : 'flex' }} />
             <ScrollView>
               <List.AccordionGroup>{availableFeatures}</List.AccordionGroup>
             </ScrollView>
           </Dialog.ScrollArea>
           <Dialog.Actions>
-            <Button onPress={() => { setVisible(false); }}>Close</Button>
+            <Button style={{ margin: 3 }} mode='outlined' onPress={handleDeleteComputer}>Delete Computer</Button>
+            <Button style={{ margin: 3 }} onPress={() => { setVisible(false); }}>Close</Button>
           </Dialog.Actions>
         </Dialog>
       </Portal>

@@ -35,12 +35,12 @@ android_library(
 
 android_build_config(
     name = "build_config",
-    package = "tk.cyberphase.monitoringcenter",
+    package = "atheesh.apps.monitoringcenter",
 )
 
 android_resource(
     name = "res",
-    package = "tk.cyberphase.monitoringcenter",
+    package = "atheesh.apps.monitoringcenter",
     res = "src/main/res",
 )
 

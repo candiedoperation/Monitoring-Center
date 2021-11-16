@@ -90,7 +90,7 @@ function setMiscKey(keyName, keyData, resolve) {
 function deleteComputer(computerUUID, resolve) {
   AsyncStorage.getItem('@computers', (error, computersList) => {
     computersList = JSON.parse(computersList);
-    computersList = delete computersList[computerUUID];
+    delete computersList[computerUUID];
     computersList = JSON.stringify(computersList);
 
     AsyncStorage.setItem('@computers', computersList, (error) => {

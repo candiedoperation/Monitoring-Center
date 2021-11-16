@@ -47,7 +47,7 @@ const FeatureGenericModal = React.forwardRef((props, ref) => {
   };
 
   return (
-    <Provider theme={monitoringTheme}>
+    <Provider theme={props.theme}>
       <Portal>
         <Dialog
           visible={visible}

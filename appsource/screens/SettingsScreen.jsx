@@ -25,7 +25,7 @@ const SettingsScreen = (props) => (
   <ScrollView contentContainerStyle={{ height: "100%" }}>
     <List.Item
       title="Authentication Keys"
-      description="Manage Public and Private Authentication Keys"
+      description="Change Private Authentication Key"
       onPress={() => { }}
       left={props => <List.Icon {...props} style={{ padding: 5 }} icon="key" />}
     />
