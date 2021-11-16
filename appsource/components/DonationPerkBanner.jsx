@@ -20,14 +20,23 @@
 import React from 'react';
 import { View } from 'native-base';
 import { Text } from 'react-native-paper';
+import { fetchMiscKey } from '../controllers/StorageController';
 
-const DonationPerkBanner = (props) => (
-  <View style={{ display: (props.visible === true ? 'flex' : 'none') }} padding={15}>
-    <Text>
-      You're Helping make Monitoring Center Better Day-by-Day.
-      We Thank You for your Generous Donation.
-    </Text>
-  </View>
-);
+const DonationPerkBanner = (props) => {
+  const [donorName, setDonorName] = React.useState('');
+
+  fetchMiscKey('@patreonData', (patreonData) => {
+    if (patreonData != null) setDonorName(`👋️ Hello ${JSON.parse(patreonData).firstName}, `);
+  });
+
+  return (
+    <View style={{ display: (props.visible === true ? 'flex' : 'none') }} padding={15}>
+      <Text>
+        {donorName}You're Helping make Monitoring Center Better Day-by-Day.
+        We Thank You for your Generous Donation.
+      </Text>
+    </View>
+  );
+};
 
 export default DonationPerkBanner;

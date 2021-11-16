@@ -104,47 +104,51 @@ const MainScreen = React.forwardRef((props, ref) => {
 
   return (
     <Provider theme={props.donationLevel > 1 ? monitoringProTheme : monitoringTheme}>
-      {(props.donationLevel > 1)
-        ? (
-          <DonationLaunch
-            donationLevel={props.donationLevel}
-            enlargeDisplay={handleFullScreenRequest}
-            actionsRequest={handleActionsRequest}
-            renderUUID={renderUUID}
-            style={{
-              flexGrow: 1,
-              minHeight: '100%',
-              display: (isListEmpty === false ? 'flex' : 'none'),
-            }}
-          />
-        )
-        : (
-          <ConfiguredLaunch
-            donationLevel={props.donationLevel}
-            donationModalRequest={props.donationModalRequest}
-            enlargeDisplay={handleFullScreenRequest}
-            actionsRequest={handleActionsRequest}
-            renderUUID={renderUUID}
-            style={{
-              flexGrow: 1,
-              minHeight: '100%',
-              display: (isListEmpty === false ? 'flex' : 'none'),
-            }}
-          />
-        )}
-
-      <FirstLaunch
-        donationLevel={props.donationLevel}
-        navigation={props.navigation}
-        requestAddComputerModal={handleAutoAddModalRequest}
-        renderUUID={renderUUID}
-        style={{
-          flexGrow: 1,
-          alignItems: 'center',
-          justifyContent: 'center',
-          display: (isListEmpty === true ? 'flex' : 'none'),
-        }}
-      />
+      {
+        // eslint-disable-next-line no-nested-ternary
+        (isListEmpty === true)
+          ? (
+            <FirstLaunch
+              donationLevel={props.donationLevel}
+              navigation={props.navigation}
+              requestAddComputerModal={handleAutoAddModalRequest}
+              renderUUID={renderUUID}
+              style={{
+                flexGrow: 1,
+                alignItems: 'center',
+                justifyContent: 'center',
+                display: (isListEmpty === true ? 'flex' : 'none'),
+              }}
+            />
+          ) : (props.donationLevel > 1)
+            ? (
+              <DonationLaunch
+                donationLevel={props.donationLevel}
+                enlargeDisplay={handleFullScreenRequest}
+                actionsRequest={handleActionsRequest}
+                renderUUID={renderUUID}
+                style={{
+                  flexGrow: 1,
+                  minHeight: '100%',
+                  display: (isListEmpty === false ? 'flex' : 'none'),
+                }}
+              />
+            )
+            : (
+              <ConfiguredLaunch
+                donationLevel={props.donationLevel}
+                donationModalRequest={props.donationModalRequest}
+                enlargeDisplay={handleFullScreenRequest}
+                actionsRequest={handleActionsRequest}
+                renderUUID={renderUUID}
+                style={{
+                  flexGrow: 1,
+                  minHeight: '100%',
+                  display: (isListEmpty === false ? 'flex' : 'none'),
+                }}
+              />
+            )
+      }
 
       <AutoDiscoveryRequest
         donationLevel={props.donationLevel}

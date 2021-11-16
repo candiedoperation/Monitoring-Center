@@ -30,17 +30,19 @@ import { fetchComputers } from '../controllers/StorageController';
 import { computerDisplayTheme } from '../themes/bubblegum';
 
 const ConfiguredLaunch = (props) => {
+  let donationRequestInterval;
   const [configuredComputers, setConfiguredComputers] = useState([]);
   const [dialogVisible, setDialogVisible] = React.useState(false);
 
   React.useEffect(() => {
+    setTimeout(() => { setDialogVisible(true); }, 8000);
     fetchComputers((computersList) => {
       console.log('Re-Rendering Elements');
-      const configuredComputers = [];
+      const internalConfiguredComputers = [];
 
       for (const [uuid, data] of Object.entries(computersList)) {
         console.log(`${uuid}: ${JSON.stringify(data)}`);
-        configuredComputers.push(
+        internalConfiguredComputers.push(
           <ComputerDisplay
             key={uuid}
             actionsRequest={props.actionsRequest}
@@ -52,17 +54,18 @@ const ConfiguredLaunch = (props) => {
         );
       }
 
-      setConfiguredComputers(configuredComputers);
+      setConfiguredComputers(internalConfiguredComputers);
     });
   }, [props.renderUUID]);
 
-  React.useState(() => {
-    if (props.donationLevel == 0) {
-      /* https://github.com/facebook/react-native/issues/12981#issuecomment-652745831 */
-      setInterval(() => { setDialogVisible(true); }, 210000);
-      setTimeout(() => { setDialogVisible(true); }, 8000);
+  React.useEffect(() => {
+    if (props.donationLevel !== 0) {
+      clearInterval(donationRequestInterval);
+      setDialogVisible(false);
+    } else {
+      donationRequestInterval = setInterval(() => { setDialogVisible(true); }, 210000);
     }
-  }, []);
+  }, [dialogVisible]);
 
   return (
     <View>

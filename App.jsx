@@ -28,11 +28,11 @@ import {
   navigationTheme, monitoringTheme, monitoringProTheme, navigationProTheme,
 } from './appsource/themes/bubblegum';
 import DonationModal from './appsource/components/DonationModal';
-import { fetchMiscKey } from './appsource/controllers/StorageController';
+import { fetchMiscKey, setMiscKey } from './appsource/controllers/StorageController';
 import prodKeys from './appsource/controllers/ProductionController';
 
 export default function App() {
-  const [donationLevel, setDonationLevel] = React.useState(0);
+  const [donationLevel, setDonationLevel] = React.useState();
   const DonationModalReference = React.useRef();
 
   function handleDonationModalRequest() {
@@ -40,20 +40,24 @@ export default function App() {
   }
 
   function InitializeApplication() {
+    /* Seamless Switch */
+    fetchMiscKey('@dlevel', (dLevel) => {
+      if (dLevel != null) setDonationLevel(+dLevel);
+    });
+
     fetchMiscKey('@patreonData', (patreonData) => {
       if (patreonData != null) {
         // eslint-disable-next-line no-param-reassign
         patreonData = JSON.parse(patreonData);
-
         axios.post(
           `${prodKeys.donationServer}/oauth/monitoring-center/license-status`,
-          { email: patreonData.email },
+          { userId: patreonData.userId },
         ).then((licenseStatus) => {
-          setDonationLevel(licenseStatus.data.dLevel);
-        }).catch(() => {
-          fetchMiscKey('@dlevel', (dLevel) => {
-            if (dLevel != null) setDonationLevel(dLevel);
+          setMiscKey('@dlevel', licenseStatus.data.dLevel.toString(), () => {
+            setDonationLevel(licenseStatus.data.dLevel);
           });
+        }).catch((error) => {
+          console.error(error);
         });
       }
     });

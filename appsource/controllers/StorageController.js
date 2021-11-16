@@ -78,8 +78,7 @@ function fetchComputer(computerUUID, resolve) {
 
 function fetchMiscKey(keyName, resolve) {
   AsyncStorage.getItem(keyName, (error, keyData) => {
-    keyData = JSON.parse(keyData);
-    resolve(keyData);
+    resolve(JSON.parse(keyData));
   });
 }
 
