@@ -31,7 +31,7 @@ const AddonFeaturePage = () => (
   <ScrollView contentContainerStyle={{ alignItems: 'center', justifyContent: 'center', minHeight: '90%' }}>
     <FastImage
       style={{ width: 100, height: 100 }}
-      source={computerDisplayTheme.underConstruction}
+      source={computerDisplayTheme.addonFeature}
     />
     <Title style={{ textAlign: 'center' }}>This is an Addon Feature</Title>
     <Caption style={{ textAlign: 'center' }}>Addon Features in Monitoring Center can be Unlocked by Tier 3 Donations</Caption>
@@ -89,37 +89,36 @@ const AutoDiscoveryRequest = React.forwardRef((internalProps, ref) => {
   }, []);
 
   return (
-    <Provider theme={internalProps.theme}>
-      <Portal>
-        <Dialog
-          visible={visible}
-          onDismiss={() => { setVisible(false); }}
-          contentContainerStyle={modalStyle}
-        >
-          <Dialog.Title>Auto Discovery Feature</Dialog.Title>
-          <Dialog.ScrollArea style={{ maxHeight: '90%' }}>
-            <ScrollView contentContainerStyle={{ alignItems: 'center', justifyContent: 'center', minHeight: '90%' }}>
-              {internalProps.donationLevel > 2 ? <AddonAvailableFeaturePage /> : <AddonFeaturePage />}
-            </ScrollView>
-          </Dialog.ScrollArea>
-          <Dialog.Actions>
-            <Button
-              mode="outlined"
-              onPress={handleManualAddition}
-            >
-              Add Manually
-            </Button>
-            <Button
-              mode="contained"
-              onPress={handleAutoAddition}
-              style={{ marginLeft: 5 }}
-            >
-              {internalProps.donationLevel > 2 ? 'Discover Computers' : 'Donate'}
-            </Button>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
-    </Provider>
+    <Portal>
+      <Dialog
+        visible={visible}
+        onDismiss={() => { setVisible(false); }}
+        contentContainerStyle={modalStyle}
+      >
+        <Dialog.Title>Auto Discovery Feature</Dialog.Title>
+        <Dialog.ScrollArea style={{ maxHeight: '90%' }}>
+          <ScrollView contentContainerStyle={{ alignItems: 'center', justifyContent: 'center', minHeight: '90%' }}>
+            {internalProps.donationLevel > 2 ? <AddonAvailableFeaturePage /> : <AddonFeaturePage />}
+          </ScrollView>
+        </Dialog.ScrollArea>
+        <Dialog.Actions>
+          <Button
+            mode="outlined"
+            style={{ flexShrink: 1 }}
+            onPress={handleManualAddition}
+          >
+            Add Manually
+          </Button>
+          <Button
+            mode="contained"
+            onPress={handleAutoAddition}
+            style={{ marginLeft: 5 }}
+          >
+            {internalProps.donationLevel > 2 ? 'Discover Computers' : 'Donate'}
+          </Button>
+        </Dialog.Actions>
+      </Dialog>
+    </Portal>
   );
 });
 

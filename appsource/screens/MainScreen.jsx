@@ -158,35 +158,30 @@ const MainScreen = React.forwardRef((props, ref) => {
         donationModalRequest={props.donationModalRequest}
         autoAdd={handleAutoStartModalRequest}
         manualAdd={handleAddModalRequest}
-        theme={props.donationLevel > 1 ? monitoringProTheme : monitoringTheme}
         ref={AutoAddComputerModalReference}
       />
       <AddComputer
         donationLevel={props.donationLevel}
         navigation={props.navigation}
-        theme={props.donationLevel > 1 ? monitoringProTheme : monitoringTheme}
         requestRefresh={requestMainScreenRefresh}
         ref={AddComputerModalReference}
       />
       <AutoDiscoveryModal
         donationLevel={props.donationLevel}
-        theme={props.donationLevel > 1 ? monitoringProTheme : monitoringTheme}
         ref={AutoAddModalReference}
       />
       <FeatureImplementation
         donationLevel={props.donationLevel}
-        theme={props.donationLevel > 1 ? monitoringProTheme : monitoringTheme}
         genericModalToggle={handleGenericModalToggle}
         requestRefresh={requestMainScreenRefresh}
         ref={FeatureImplementationReference}
       />
       <FeatureGenericModal
         donationLevel={props.donationLevel}
-        theme={props.donationLevel > 1 ? monitoringProTheme : monitoringTheme}
+        donationModalRequest={props.donationModalRequest}
         ref={FeatureGenericModalReference}
       />
       <EnlargedFrameBuffer
-        theme={props.donationLevel > 1 ? monitoringProTheme : monitoringTheme}
         ref={EnlargedFrameBufferReference}
       />
     </Provider>

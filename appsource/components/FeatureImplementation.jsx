@@ -120,23 +120,21 @@ const FeatureImplementation = React.forwardRef((props, ref) => {
   React.useEffect(visible === true ? initializationParams : destructionParams, [visible]);
 
   return (
-    <Provider theme={props.theme}>
-      <Portal>
-        <Dialog visible={visible} onDismiss={() => { setVisible(false); }} contentContainerStyle={modalStyle}>
-          <Dialog.Title>Available Features</Dialog.Title>
-          <Dialog.ScrollArea style={{ maxHeight: '85%', paddingLeft: 0, paddingRight: 0 }}>
-            <ActivityIndicator style={{ margin: 30, display: (availableFeatures.length != 0) ? 'none' : 'flex' }} />
-            <ScrollView>
-              <List.AccordionGroup>{availableFeatures}</List.AccordionGroup>
-            </ScrollView>
-          </Dialog.ScrollArea>
-          <Dialog.Actions>
-            <Button style={{ margin: 3 }} mode='outlined' onPress={handleDeleteComputer}>Delete Computer</Button>
-            <Button style={{ margin: 3 }} onPress={() => { setVisible(false); }}>Close</Button>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
-    </Provider>
+    <Portal>
+      <Dialog visible={visible} onDismiss={() => { setVisible(false); }} contentContainerStyle={modalStyle}>
+        <Dialog.Title>Available Features</Dialog.Title>
+        <Dialog.ScrollArea style={{ maxHeight: '85%', paddingLeft: 0, paddingRight: 0 }}>
+          <ActivityIndicator style={{ margin: 30, display: (availableFeatures.length != 0) ? 'none' : 'flex' }} />
+          <ScrollView>
+            <List.AccordionGroup>{availableFeatures}</List.AccordionGroup>
+          </ScrollView>
+        </Dialog.ScrollArea>
+        <Dialog.Actions>
+          <Button style={{ margin: 3 }} mode='outlined' onPress={handleDeleteComputer}>Delete Computer</Button>
+          <Button style={{ margin: 3 }} onPress={() => { setVisible(false); }}>Close</Button>
+        </Dialog.Actions>
+      </Dialog>
+    </Portal>
   );
 });
 

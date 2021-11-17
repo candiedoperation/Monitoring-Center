@@ -94,7 +94,7 @@ const SettingsScreen = (props) => {
       <Portal>
         <Dialog
           visible={lockedModalVisible}
-          onDismiss={() => { setPatreonSignOutVisible(false); }}
+          onDismiss={() => { setLockedModalVisible(false); }}
         >
           <Dialog.Title>{lockedModalTitle}</Dialog.Title>
           <Dialog.ScrollArea>

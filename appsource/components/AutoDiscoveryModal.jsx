@@ -52,36 +52,34 @@ const AutoDiscoveryModal = React.forwardRef((props, ref) => {
   }, [visible]);
 
   return (
-    <Provider theme={props.theme}>
-      <Portal>
-        <Dialog
-          visible={visible}
-          onDismiss={() => { setVisible(false); }}
-          contentContainerStyle={modalStyle}
-        >
-          <Dialog.Title>Discovered Computers</Dialog.Title>
-          <Dialog.ScrollArea style={{ maxHeight: '90%', paddingLeft: 0, paddingRight: 0 }}>
-            <ScrollView>
-              {availableComputers}
-              <ActivityIndicator style={{ margin: 30, display: Object.keys(availableComputers).length === 0 ? 'flex' : 'none' }} animating />
-              <Flex style={{ marginBottom: 10 }}>
-                <Caption style={{ textAlign: 'center', marginBottom: 0 }}>Didn't Find What You're Looking For?</Caption>
-                <Caption style={{ textAlign: 'center', color: monitoringTheme.colors.accent, marginTop: 0 }} onPress={() => { }}>Click Here</Caption>
-              </Flex>
-            </ScrollView>
-          </Dialog.ScrollArea>
-          <Dialog.Actions>
-            <Button onPress={() => { setVisible(false); }}>Cancel</Button>
-            <Button
-              mode="contained"
-              style={{ marginLeft: 5 }}
-            >
-              Add Selected
-            </Button>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
-    </Provider>
+    <Portal>
+      <Dialog
+        visible={visible}
+        onDismiss={() => { setVisible(false); }}
+        contentContainerStyle={modalStyle}
+      >
+        <Dialog.Title>Discovered Computers</Dialog.Title>
+        <Dialog.ScrollArea style={{ maxHeight: '90%', paddingLeft: 0, paddingRight: 0 }}>
+          <ScrollView>
+            {availableComputers}
+            <ActivityIndicator style={{ margin: 30, display: Object.keys(availableComputers).length === 0 ? 'flex' : 'none' }} animating />
+            <Flex style={{ marginBottom: 10 }}>
+              <Caption style={{ textAlign: 'center', marginBottom: 0 }}>Didn't Find What You're Looking For?</Caption>
+              <Caption style={{ textAlign: 'center', color: monitoringTheme.colors.accent, marginTop: 0 }} onPress={() => { }}>Click Here</Caption>
+            </Flex>
+          </ScrollView>
+        </Dialog.ScrollArea>
+        <Dialog.Actions>
+          <Button onPress={() => { setVisible(false); }}>Cancel</Button>
+          <Button
+            mode="contained"
+            style={{ marginLeft: 5 }}
+          >
+            Add Selected
+          </Button>
+        </Dialog.Actions>
+      </Dialog>
+    </Portal>
   );
 });
 

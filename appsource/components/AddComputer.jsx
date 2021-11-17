@@ -19,9 +19,9 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import {
-  Checkbox, Snackbar, Dialog, Portal, TextInput, Button, Provider, RadioButton, Text, Subheading,
+  Checkbox, Snackbar, Dialog, Portal, TextInput, Button, RadioButton, Text, Subheading,
 } from 'react-native-paper';
-import { Box, Flex, ScrollView } from 'native-base';
+import { Box, Flex, ScrollView, View } from 'native-base';
 import axios from 'axios';
 import Ping from 'react-native-ping';
 import { addComputer } from '../controllers/StorageController';
@@ -163,7 +163,7 @@ const AddComputer = React.forwardRef((props, ref) => {
   };
 
   return (
-    <Provider theme={props.theme}>
+    <View>
       <Portal>
         <Dialog visible={visible} onDismiss={() => { setVisible(false); }} contentContainerStyle={modalStyle}>
           <Dialog.Title>Add a Computer</Dialog.Title>
@@ -171,10 +171,10 @@ const AddComputer = React.forwardRef((props, ref) => {
             <ScrollView paddingBottom={5}>
               <TextInput error={connectionError01} value={IPAddressText} disabled={primaryInfoDisabled} onChangeText={handleIPAddressKeyin} mode="outlined" label="Computer Domain or IP Address" />
               <Flex marginTop={3} direction="row" alignItems="center">
-                <Checkbox disabled={primaryInfoDisabled} status={usingProxy ? 'checked' : 'unchecked'} onPress={() => { setUsingProxy(!usingProxy); }} />
-                <Text style={{ flexGrow: 1 }}>Veyon Proxy Server</Text>
                 <Checkbox disabled={primaryInfoDisabled} status={usingHTTPS ? 'checked' : 'unchecked'} onPress={() => { setUsingHTTPS(!usingHTTPS); }} />
                 <Text style={{ flexGrow: 1 }}>Use HTTPS</Text>
+                <Checkbox disabled={primaryInfoDisabled} status={usingProxy ? 'checked' : 'unchecked'} onPress={() => { setUsingProxy(!usingProxy); }} />
+                <Text numberOfLines={1} style={{ flexShrink: 1 }}>Veyon Proxy Server</Text>
               </Flex>
               <Box display={usingProxy ? 'flex' : 'none'} mt={3}>
                 <Flex>
@@ -224,7 +224,7 @@ const AddComputer = React.forwardRef((props, ref) => {
           {snackBarText}
         </Snackbar>
       </Portal>
-    </Provider>
+    </View>
   );
 });
 
