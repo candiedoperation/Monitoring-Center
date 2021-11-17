@@ -16,12 +16,17 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+/* eslint-disable react/jsx-no-bind */
+/* eslint-disable react/prop-types */
+/* eslint-disable react/destructuring-assignment */
 import React from 'react';
 import { View, ScrollView } from 'native-base';
 import {
-  List, Portal, Dialog, Button, Paragraph, Snackbar,
+  List, Portal, Dialog, Button, Paragraph, Snackbar, Title, Caption,
 } from 'react-native-paper';
+import FastImage from 'react-native-fast-image';
 import { getVersion } from 'react-native-device-info';
+import { computerDisplayTheme } from '../themes/bubblegum';
 import { deleteStorageKey, fetchMiscKey } from '../controllers/StorageController';
 import AuthKeyManager from '../components/AuthKeyManager';
 
@@ -29,6 +34,9 @@ const SettingsScreen = (props) => {
   const [patreonDesc, setPatreonDesc] = React.useState('App is Not Connected to Patreon');
   const [isPatreonConnected, setPatreonConnected] = React.useState(false);
   const [patreonSignOutVisible, setPatreonSignOutVisible] = React.useState(false);
+  const [lockedModalTitle, setLockedModalTitle] = React.useState('');
+  const [lockedModalTier, setLockedModalTier] = React.useState(0);
+  const [lockedModalVisible, setLockedModalVisible] = React.useState(false);
   const [snackBarText, setSnackBarText] = React.useState('');
   const [snackBarVisible, setSnackBarVisible] = React.useState(false);
   const AuthKeyManagerReference = React.useRef();
@@ -76,6 +84,48 @@ const SettingsScreen = (props) => {
     );
   };
 
+  const LockedModal = () => {
+    function handleLockedDonation() {
+      setLockedModalVisible(false);
+      props.donationModalRequest();
+    }
+
+    return (
+      <Portal>
+        <Dialog
+          visible={lockedModalVisible}
+          onDismiss={() => { setPatreonSignOutVisible(false); }}
+        >
+          <Dialog.Title>{lockedModalTitle}</Dialog.Title>
+          <Dialog.ScrollArea>
+            <ScrollView contentContainerStyle={{ alignItems: 'center', justifyContent: 'center', minHeight: '80%' }}>
+              <FastImage
+                style={{ width: 100, height: 100 }}
+                source={computerDisplayTheme.addonFeature}
+              />
+              <Title style={{ textAlign: 'center' }}>
+                {lockedModalTitle}
+                {' '}
+                is an Addon Feature
+              </Title>
+              <Caption style={{ textAlign: 'center' }}>
+                It can be Unlocked by Tier
+                {' '}
+                {lockedModalTier}
+                {' '}
+                Donations
+              </Caption>
+            </ScrollView>
+          </Dialog.ScrollArea>
+          <Dialog.Actions>
+            <Button style={{ margin: 3 }} mode="outlined" onPress={() => { setLockedModalVisible(false); }}>Close</Button>
+            <Button style={{ margin: 3 }} mode="contained" onPress={handleLockedDonation}>Donate</Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
+    );
+  };
+
   React.useEffect(() => {
     fetchMiscKey('@patreonData', (patreonData) => {
       if (patreonData !== null) {
@@ -108,13 +158,31 @@ const SettingsScreen = (props) => {
         <List.Item
           title="Export Configuration"
           description="Export List of All Computers and Settings"
-          onPress={() => { }}
+          onPress={() => {
+            if (props.donationLevel > 1) {
+              // eslint-disable-next-line no-alert
+              alert('Feature is Under Development!');
+            } else {
+              setLockedModalTitle('Export Configuration');
+              setLockedModalTier(2);
+              setLockedModalVisible(true);
+            }
+          }}
           left={(props) => <List.Icon {...props} style={{ padding: 5 }} icon="export" />}
         />
         <List.Item
           title="Import Configuration"
           description="Import Saved Settings"
-          onPress={() => { }}
+          onPress={() => {
+            if (props.donationLevel > 1) {
+              // eslint-disable-next-line no-alert
+              alert('Feature is Under Development!');
+            } else {
+              setLockedModalTitle('Import Configuration');
+              setLockedModalTier(2);
+              setLockedModalVisible(true);
+            }
+          }}
           left={(props) => <List.Icon {...props} style={{ padding: 5 }} icon="import" />}
         />
         <List.Item
@@ -126,6 +194,7 @@ const SettingsScreen = (props) => {
       </ScrollView>
 
       <PatreonActionDialog />
+      <LockedModal />
       <AuthKeyManager showSnackbar={showSnackbar} ref={AuthKeyManagerReference} />
 
       <Portal>

@@ -1,3 +1,4 @@
+/* eslint-disable react/no-children-prop */
 /*
     Monitoring Center
     Copyright (C) 2021  Atheesh Thirumalairajan
@@ -52,8 +53,31 @@ const ApplicationInterface = (props) => {
           ),
         }}
       >
-        <Drawer.Screen name="Computers" children={(props_internal) => (<MainScreen {...props_internal} donationLevel={props.donationLevel} donationModalRequest={props.donationModalRequest} ref={MainScreenReference} />)} />
-        <Drawer.Screen name="Settings" component={SettingsScreen} />
+        <Drawer.Screen
+          name="Computers"
+          children={
+            (props_internal) => (
+              <MainScreen
+                {...props_internal}
+                donationLevel={props.donationLevel}
+                donationModalRequest={props.donationModalRequest}
+                ref={MainScreenReference}
+              />
+            )
+          }
+        />
+        <Drawer.Screen
+          name="Settings"
+          children={
+            (props_internal) => (
+              <SettingsScreen
+                {...props_internal}
+                donationLevel={props.donationLevel}
+                donationModalRequest={props.donationModalRequest}
+              />
+            )
+          }
+        />
         <Drawer.Screen name="Help" component={HelpScreen} />
         <Drawer.Screen name="About Application" children={(props_internal) => (<AboutScreen {...props_internal} donationModalRequest={props.donationModalRequest} />)} />
       </Drawer.Navigator>
