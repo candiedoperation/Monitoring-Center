@@ -23,7 +23,7 @@ import { Provider } from 'react-native-paper';
 import AddComputer from '../components/AddComputer';
 import ConfiguredLaunch from '../components/ConfiguredLaunch';
 import FirstLaunch from '../components/FirstLaunch';
-import { fetchComputers, setPrivateKey } from '../controllers/StorageController';
+import { fetchComputers } from '../controllers/StorageController';
 import { monitoringProTheme, monitoringTheme } from '../themes/bubblegum';
 import EnlargedFrameBuffer from '../components/EnlargedFrameBuffer';
 import FeatureImplementation from '../components/FeatureImplementation';
@@ -87,8 +87,6 @@ const MainScreen = React.forwardRef((props, ref) => {
       internalConnectionData,
     );
   }
-
-  setPrivateKey('monitoringcenter', '<PRIVATE-KEY>', () => { }, () => { });
 
   React.useEffect(() => {
     // eslint-disable-next-line no-console

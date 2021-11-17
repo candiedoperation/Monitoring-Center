@@ -102,8 +102,8 @@ function deleteComputer(computerUUID, resolve) {
   });
 }
 
-/* OBSOLETE start */
-
+/*
+***** OBSOLETE IMPLEMENTATIONS START *****
 function setPrivateKey(keyName, keyData, resolve, reject) {
   AsyncStorage.setItem('@privatekey', JSON.stringify({
     keyName,
@@ -126,8 +126,8 @@ function getPrivateKey(resolve, reject) {
     }
   });
 }
-
-/* OBSOLETE END */
+***** OBSOLETE IMPLEMENTATIONS END *****
+*/
 
 // deleteStorageKey IS ONLY FOR DEBUGGING PURPOSES
 function deleteStorageKey(keyIdentifier, resolve, reject) {
@@ -148,8 +148,6 @@ export {
   importStorageData,
   deleteStorageKey,
   deleteComputer,
-  getPrivateKey,
-  setPrivateKey,
   fetchMiscKey,
   setMiscKey,
   initializeStorageKey,
