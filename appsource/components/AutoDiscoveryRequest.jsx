@@ -49,7 +49,7 @@ const AddonAvailableFeaturePage = () => (
   </ScrollView>
 );
 
-const AutoDiscoveryRequest = React.forwardRef((props, ref) => {
+const AutoDiscoveryRequest = React.forwardRef((internalProps, ref) => {
   const [visible, setVisible] = React.useState(false);
 
   React.useImperativeHandle(ref, () => ({
@@ -65,16 +65,16 @@ const AutoDiscoveryRequest = React.forwardRef((props, ref) => {
   };
 
   function requestDonation() {
-
+    if (internalProps.donationLevel <= 2) internalProps.donationModalRequest();
   }
 
   function handleManualAddition() {
-    props.manualAdd();
+    internalProps.manualAdd();
     setVisible(false);
   }
 
   function handleAutoAddition() {
-    (props.donationLevel > 2 ? props.autoAdd() : requestDonation());
+    (internalProps.donationLevel > 2 ? internalProps.autoAdd() : requestDonation());
     setVisible(false);
   }
 
@@ -89,7 +89,7 @@ const AutoDiscoveryRequest = React.forwardRef((props, ref) => {
   }, []);
 
   return (
-    <Provider theme={props.theme}>
+    <Provider theme={internalProps.theme}>
       <Portal>
         <Dialog
           visible={visible}
@@ -99,7 +99,7 @@ const AutoDiscoveryRequest = React.forwardRef((props, ref) => {
           <Dialog.Title>Auto Discovery Feature</Dialog.Title>
           <Dialog.ScrollArea style={{ maxHeight: '90%' }}>
             <ScrollView contentContainerStyle={{ alignItems: 'center', justifyContent: 'center', minHeight: '90%' }}>
-              {props.donationLevel > 2 ? <AddonAvailableFeaturePage /> : <AddonFeaturePage />}
+              {internalProps.donationLevel > 2 ? <AddonAvailableFeaturePage /> : <AddonFeaturePage />}
             </ScrollView>
           </Dialog.ScrollArea>
           <Dialog.Actions>
@@ -114,7 +114,7 @@ const AutoDiscoveryRequest = React.forwardRef((props, ref) => {
               onPress={handleAutoAddition}
               style={{ marginLeft: 5 }}
             >
-              {props.donationLevel > 2 ? 'Discover Computers' : 'Donate'}
+              {internalProps.donationLevel > 2 ? 'Discover Computers' : 'Donate'}
             </Button>
           </Dialog.Actions>
         </Dialog>

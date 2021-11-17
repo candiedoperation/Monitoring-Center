@@ -155,6 +155,7 @@ const MainScreen = React.forwardRef((props, ref) => {
 
       <AutoDiscoveryRequest
         donationLevel={props.donationLevel}
+        donationModalRequest={props.donationModalRequest}
         autoAdd={handleAutoStartModalRequest}
         manualAdd={handleAddModalRequest}
         theme={props.donationLevel > 1 ? monitoringProTheme : monitoringTheme}
