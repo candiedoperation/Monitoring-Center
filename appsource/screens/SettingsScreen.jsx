@@ -20,6 +20,10 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/destructuring-assignment */
 import React from 'react';
+import { PermissionsAndroid } from 'react-native';
+import * as mime from 'react-native-mime-types';
+import * as RNFS from 'react-native-fs';
+import { pick as configPicker, isCancel as isPickCancelled } from 'react-native-document-picker';
 import { View, ScrollView } from 'native-base';
 import {
   List, Portal, Dialog, Button, Paragraph, Snackbar, Title, Caption,
@@ -27,7 +31,7 @@ import {
 import FastImage from 'react-native-fast-image';
 import { getVersion } from 'react-native-device-info';
 import { computerDisplayTheme } from '../themes/bubblegum';
-import { deleteStorageKey, fetchMiscKey } from '../controllers/StorageController';
+import { deleteStorageKey, exportStorageData, fetchMiscKey, importStorageData } from '../controllers/StorageController';
 import AuthKeyManager from '../components/AuthKeyManager';
 
 const SettingsScreen = (props) => {
@@ -140,6 +144,94 @@ const SettingsScreen = (props) => {
     setSnackBarVisible(true);
   }
 
+  async function handleExportConfiguration() {
+    if (props.donationLevel > 1) {
+      try {
+        const directoryAccessGranted = await PermissionsAndroid.requestMultiple([
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+        ]);
+
+        const readGranted = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);
+        const writeGranted = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
+
+        if (!readGranted || !writeGranted) {
+          showSnackbar('File Access Permission Denied');
+        } else {
+          exportStorageData((storageData) => {
+            const exportDirectory = `${RNFS.ExternalStorageDirectoryPath}/Documents/Monitoring Center/Configurations`;
+            const exportPath = `${exportDirectory}/monitoringcenter-config (${new Date().getTime()}).json`;
+
+            RNFS.mkdir(exportDirectory); // Does not throw if already exists
+            RNFS.writeFile(exportPath, storageData, 'utf8')
+              .then(() => {
+                showSnackbar(`Configuration Exported to ${exportDirectory}`);
+              })
+              .catch((err) => {
+                console.error(err);
+                showSnackbar('Configuration Export Failed');
+              });
+          });
+        }
+      } catch (error) {
+        console.warn(error);
+      }
+    } else {
+      setLockedModalTitle('Export Configuration');
+      setLockedModalTier(2);
+      setLockedModalVisible(true);
+    }
+  }
+
+  async function handleImportConfiguration() {
+    if (props.donationLevel > 1) {
+      try {
+        const directoryAccessGranted = await PermissionsAndroid.requestMultiple([
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+        ]);
+
+        const readGranted = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);
+        const writeGranted = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
+
+        if (!readGranted || !writeGranted) {
+          showSnackbar('File Access Permission Denied');
+        } else {
+          configPicker({
+            allowMultiSelection: false,
+            type: [mime.lookup('json')],
+          }).then((pickedConfiguration) => {
+            RNFS.readFile(pickedConfiguration[0].uri, 'utf8')
+              .then((storageDB) => {
+                importStorageData(JSON.parse(storageDB),
+                  () => {
+                    showSnackbar('Failed to Import Configuration File');
+                  },
+                  () => {
+                    showSnackbar('Successfully Imported Configuration File');
+                  });
+              })
+              .catch(() => {
+                showSnackbar('Failed to Read Configuration File');
+              });
+          }).catch((error) => {
+            if (isPickCancelled(error)) {
+              showSnackbar('Configuration Import Cancelled');
+            } else {
+              console.error(error);
+            }
+          });
+        }
+      } catch (error) {
+        console.warn(error);
+      }
+    } else {
+      setLockedModalTitle('Import Configuration');
+      setLockedModalTier(2);
+      setLockedModalVisible(true);
+    }
+  }
+
   return (
     <View>
       <ScrollView contentContainerStyle={{ height: '100%' }}>
@@ -158,31 +250,13 @@ const SettingsScreen = (props) => {
         <List.Item
           title="Export Configuration"
           description="Export List of All Computers and Settings"
-          onPress={() => {
-            if (props.donationLevel > 1) {
-              // eslint-disable-next-line no-alert
-              alert('Feature is Under Development!');
-            } else {
-              setLockedModalTitle('Export Configuration');
-              setLockedModalTier(2);
-              setLockedModalVisible(true);
-            }
-          }}
+          onPress={handleExportConfiguration}
           left={(props) => <List.Icon {...props} style={{ padding: 5 }} icon="export" />}
         />
         <List.Item
           title="Import Configuration"
           description="Import Saved Settings"
-          onPress={() => {
-            if (props.donationLevel > 1) {
-              // eslint-disable-next-line no-alert
-              alert('Feature is Under Development!');
-            } else {
-              setLockedModalTitle('Import Configuration');
-              setLockedModalTier(2);
-              setLockedModalVisible(true);
-            }
-          }}
+          onPress={handleImportConfiguration}
           left={(props) => <List.Icon {...props} style={{ padding: 5 }} icon="import" />}
         />
         <List.Item

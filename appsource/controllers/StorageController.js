@@ -17,6 +17,7 @@
 */
 
 /* eslint-disable no-param-reassign */
+/* eslint-disable no-unused-expressions */
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import uuid from 'react-native-uuid';
 
@@ -41,6 +42,8 @@ function addComputer(computerAddress, computerAuth, callback) {
 
 function exportStorageData(resolve) {
   AsyncStorage.getAllKeys(async (error, storageKeys) => {
+    const blacklistKeys = ['@authKeys', '@dlevel'];
+    storageKeys = storageKeys.filter((filters) => !blacklistKeys.includes(filters));
     AsyncStorage.multiGet(storageKeys, (error, storageData) => {
       resolve(JSON.stringify(storageData));
     });
@@ -52,7 +55,6 @@ function importStorageData(storageData, reject, resolve) {
     if (!error) {
       resolve();
     } else {
-      console.log(error);
       reject(error);
     }
   });
