@@ -1,4 +1,3 @@
-/* eslint-disable react/no-children-prop */
 /*
     Monitoring Center
     Copyright (C) 2021  Atheesh Thirumalairajan
@@ -17,6 +16,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+/* eslint-disable react/no-children-prop */
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
