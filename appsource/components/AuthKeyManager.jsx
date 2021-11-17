@@ -24,7 +24,7 @@
 import React from 'react';
 import { PermissionsAndroid, Platform } from 'react-native';
 import {
-  Portal, Dialog, Button, Text, ActivityIndicator, TextInput,
+  Portal, Dialog, Button, Text, Caption, ActivityIndicator, TextInput,
 } from 'react-native-paper';
 import { ScrollView } from 'native-base';
 import { RSA } from 'react-native-rsa-native';
@@ -39,6 +39,8 @@ const AuthKeyManager = React.forwardRef((props, ref) => {
   const [authKeyList, setAuthKeyList] = React.useState([]);
   const [isRSAWorking, setRSAWorking] = React.useState(false);
   const [keyNameVisible, setKeyNameVisible] = React.useState(false);
+  const [keyEditVisible, setKeyEditVisible] = React.useState(false);
+  const [currentEditUUID, setCurrentEditUUID] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
   const [isImporting, setImportInProgress] = React.useState(false);
 
@@ -75,6 +77,10 @@ const AuthKeyManager = React.forwardRef((props, ref) => {
         <Dialog visible={keyNameVisible} onDismiss={() => { setKeyNameVisible(false); }}>
           <Dialog.Content>
             <TextInput mode="outlined" label="Key Name" value={keyName} onChangeText={handleInputType} />
+            <Caption style={{ marginTop: 15, textAlign: 'center' }}>
+              Key Names in Monitoring Center and Veyon Configurator
+              should be same for Successful Authentication
+            </Caption>
           </Dialog.Content>
           <Dialog.Actions>
             <Button
@@ -97,6 +103,51 @@ const AuthKeyManager = React.forwardRef((props, ref) => {
               }}
             >
               Create Key Pair
+            </Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
+    );
+  };
+
+  const KeyNameEditInput = () => {
+    const [editKeyName, setEditKeyName] = React.useState('');
+    const [editEnabled, setEditEnabled] = React.useState(false);
+
+    function handleInputType(newText) {
+      // eslint-disable-next-line no-unused-expressions
+      newText.trim() !== '' ? setEditEnabled(true) : setEditEnabled(false);
+      setEditKeyName(newText);
+    }
+
+    return (
+      <Portal>
+        <Dialog visible={keyEditVisible} onDismiss={() => { setKeyEditVisible(false); }}>
+          <Dialog.Content>
+            <TextInput mode="outlined" label="New Key Name" value={editKeyName} onChangeText={handleInputType} />
+            <Caption style={{ marginTop: 15, textAlign: 'center' }}>
+              Key Names in Monitoring Center and Veyon Configurator
+              should be same for Successful Authentication
+            </Caption>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button style={{ margin: 3 }} onPress={() => { setKeyEditVisible(false); }}>
+              Cancel
+            </Button>
+
+            <Button
+              mode="contained"
+              disabled={!editEnabled}
+              style={{ margin: 3, flexShrink: 1 }}
+              onPress={() => {
+                if (editKeyName.trim() !== '') {
+                  // eslint-disable-next-line no-use-before-define
+                  handleKeyRename(currentEditUUID, editKeyName);
+                  setKeyEditVisible(false);
+                }
+              }}
+            >
+              Change Key Name
             </Button>
           </Dialog.Actions>
         </Dialog>
@@ -136,6 +187,16 @@ const AuthKeyManager = React.forwardRef((props, ref) => {
     fetchMiscKey('@authKeys', (authKeys) => {
       delete authKeys[keyUUID];
 
+      setMiscKey('@authKeys', authKeys, () => {
+        setVisible(false);
+        setVisible(true);
+      });
+    });
+  }
+
+  function handleKeyRename(keyUUID, keyName) {
+    fetchMiscKey('@authKeys', (authKeys) => {
+      authKeys[keyUUID].keyName = keyName;
       setMiscKey('@authKeys', authKeys, () => {
         setVisible(false);
         setVisible(true);
@@ -230,8 +291,12 @@ const AuthKeyManager = React.forwardRef((props, ref) => {
                   });
                 } else {
                   if (keyFileData.includes('PRIVATE')) {
+                    let strippedKeyName = pickedConfiguration[0].name;
+                    if (strippedKeyName.includes('_private_key')) strippedKeyName = strippedKeyName.replace(/_private_key/g, '');
+                    if (strippedKeyName.includes('.')) strippedKeyName = strippedKeyName.substring(0, strippedKeyName.indexOf('.'));
+
                     fetchedAuthKeys[uuid.v4()] = {
-                      keyName: pickedConfiguration[0].name.substring(0, pickedConfiguration[0].name.indexOf('_')),
+                      keyName: strippedKeyName,
                       privateKey: keyFileData,
                       isImported: true,
                     };
@@ -276,6 +341,7 @@ const AuthKeyManager = React.forwardRef((props, ref) => {
               key={authKey}
               deleteKey={() => { handleDeleteKeyPair(authKey); }}
               exportKey={() => { handleExportKeyPairAndroid(authKey); }}
+              editKey={() => { setCurrentEditUUID(authKey); setKeyEditVisible(true); }}
               title={authKeys[authKey].keyName}
               description={authKeys[authKey].isImported === false ? 'Monitoring Center Key Pair' : 'Imported Private Key'}
             />,
@@ -355,7 +421,9 @@ const AuthKeyManager = React.forwardRef((props, ref) => {
           </Button>
         </Dialog.Actions>
       </Dialog>
+
       <KeyNameInput />
+      <KeyNameEditInput />
     </Portal>
   );
 });

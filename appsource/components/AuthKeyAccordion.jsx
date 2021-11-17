@@ -28,6 +28,7 @@ const AuthKeyAccordion = (props) => (
     right={(internal_props) => (
       <View flexDirection="row">
         <Appbar.Action onPress={props.exportKey} icon="export" />
+        <Appbar.Action onPress={props.editKey} icon="pencil" />
         <Appbar.Action onPress={props.deleteKey} icon="delete" />
       </View>
     )}
