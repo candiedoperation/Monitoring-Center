@@ -128,7 +128,7 @@ const DonationModal = React.forwardRef((props, ref) => {
               source={computerDisplayTheme.externalConnect}
             />
             <Title style={{ textAlign: 'center' }}>Connecting You to Patreon</Title>
-            <Caption style={{ textAlign: 'center' }}>Please Wait while I securely connect you to Patreon</Caption>
+            <Caption style={{ textAlign: 'center' }}>Please Wait while You're being securely connected to Patreon</Caption>
           </ScrollView>
         </Dialog.ScrollArea>
         <Dialog.Actions>

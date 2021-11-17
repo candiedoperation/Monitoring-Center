@@ -23,7 +23,7 @@ import { Flex, ScrollView } from 'native-base';
 const FirstLaunch = (props) => (
   <ScrollView contentContainerStyle={{ height: '100%' }}>
     <Flex height="90%" alignItems="center" justifyContent="center">
-      <Avatar.Icon size={128} backgroundColor="transparent" color="#bc245d" icon="devices" />
+      <Avatar.Icon size={128} backgroundColor="transparent" color={props.primaryColor} icon="devices" />
       <Title style={{ marginBottom: 10 }}>It's Empty in Here…</Title>
       <Flex>
         <Button style={{ margin: 5 }} icon="plus" mode="contained" onPress={props.requestAddComputerModal}>Add a Computer</Button>

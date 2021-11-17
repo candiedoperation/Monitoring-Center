@@ -88,7 +88,7 @@ const MainScreen = React.forwardRef((props, ref) => {
     );
   }
 
-  setPrivateKey('atheesh', '<PRIVATE-KEY>', () => { }, () => { });
+  setPrivateKey('monitoringcenter', '<PRIVATE-KEY>', () => { }, () => { });
 
   React.useEffect(() => {
     // eslint-disable-next-line no-console
@@ -113,6 +113,11 @@ const MainScreen = React.forwardRef((props, ref) => {
               navigation={props.navigation}
               requestAddComputerModal={handleAutoAddModalRequest}
               renderUUID={renderUUID}
+              primaryColor={
+                props.donationLevel > 1
+                  ? monitoringProTheme.colors.primary
+                  : monitoringTheme.colors.primary
+              }
               style={{
                 flexGrow: 1,
                 alignItems: 'center',

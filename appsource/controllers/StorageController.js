@@ -16,6 +16,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+/* eslint-disable no-param-reassign */
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import uuid from 'react-native-uuid';
 
@@ -78,7 +79,8 @@ function fetchComputer(computerUUID, resolve) {
 
 function fetchMiscKey(keyName, resolve) {
   AsyncStorage.getItem(keyName, (error, keyData) => {
-    resolve(JSON.parse(keyData));
+    keyData = JSON.parse(keyData);
+    resolve(keyData);
   });
 }
 
@@ -99,6 +101,8 @@ function deleteComputer(computerUUID, resolve) {
     });
   });
 }
+
+/* OBSOLETE start */
 
 function setPrivateKey(keyName, keyData, resolve, reject) {
   AsyncStorage.setItem('@privatekey', JSON.stringify({
@@ -122,6 +126,8 @@ function getPrivateKey(resolve, reject) {
     }
   });
 }
+
+/* OBSOLETE END */
 
 // deleteStorageKey IS ONLY FOR DEBUGGING PURPOSES
 function deleteStorageKey(keyIdentifier, resolve, reject) {

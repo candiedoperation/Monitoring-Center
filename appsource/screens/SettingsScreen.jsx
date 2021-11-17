@@ -19,15 +19,19 @@
 import React from 'react';
 import { View, ScrollView } from 'native-base';
 import {
-  List, Portal, Dialog, Button, Paragraph,
+  List, Portal, Dialog, Button, Paragraph, Snackbar,
 } from 'react-native-paper';
 import { getVersion } from 'react-native-device-info';
 import { deleteStorageKey, fetchMiscKey } from '../controllers/StorageController';
+import AuthKeyManager from '../components/AuthKeyManager';
 
 const SettingsScreen = (props) => {
   const [patreonDesc, setPatreonDesc] = React.useState('App is Not Connected to Patreon');
   const [isPatreonConnected, setPatreonConnected] = React.useState(false);
   const [patreonSignOutVisible, setPatreonSignOutVisible] = React.useState(false);
+  const [snackBarText, setSnackBarText] = React.useState('');
+  const [snackBarVisible, setSnackBarVisible] = React.useState(false);
+  const AuthKeyManagerReference = React.useRef();
 
   const PatreonActionDialog = () => {
     function handleDeleteAction() {
@@ -81,13 +85,18 @@ const SettingsScreen = (props) => {
     });
   }, []);
 
+  function showSnackbar(internalText) {
+    setSnackBarText(internalText);
+    setSnackBarVisible(true);
+  }
+
   return (
     <View>
       <ScrollView contentContainerStyle={{ height: '100%' }}>
         <List.Item
-          title="Authentication Key"
-          description="Change Private Authentication Key"
-          onPress={() => { }}
+          title="Authentication Keys"
+          description="Manage Private Authentication Keys"
+          onPress={() => { AuthKeyManagerReference.current.requestModalVisibility(); }}
           left={(props) => <List.Icon {...props} style={{ padding: 5 }} icon="key" />}
         />
         <List.Item
@@ -97,10 +106,16 @@ const SettingsScreen = (props) => {
           left={(props) => <List.Icon {...props} style={{ padding: 5 }} icon="account-lock" />}
         />
         <List.Item
-          title="Preview Refresh Interval"
-          description="3 seconds"
+          title="Export Configuration"
+          description="Export List of All Computers and Settings"
           onPress={() => { }}
-          left={(props) => <List.Icon {...props} style={{ padding: 5 }} icon="timer" />}
+          left={(props) => <List.Icon {...props} style={{ padding: 5 }} icon="export" />}
+        />
+        <List.Item
+          title="Import Configuration"
+          description="Import Saved Settings"
+          onPress={() => { }}
+          left={(props) => <List.Icon {...props} style={{ padding: 5 }} icon="import" />}
         />
         <List.Item
           title="About Application"
@@ -111,6 +126,13 @@ const SettingsScreen = (props) => {
       </ScrollView>
 
       <PatreonActionDialog />
+      <AuthKeyManager showSnackbar={showSnackbar} ref={AuthKeyManagerReference} />
+
+      <Portal>
+        <Snackbar visible={snackBarVisible} onDismiss={() => { setSnackBarVisible(false); }}>
+          {snackBarText}
+        </Snackbar>
+      </Portal>
     </View>
   );
 };
