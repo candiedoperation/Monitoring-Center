@@ -2,8 +2,6 @@
 # Monitoring Center
 An Android and iOS Application for [Veyon](https://veyon.io)
 
-⚠️ Please Note: This project is not to be considered stale. I do not have much time right now and I have decided to contribute to this project in Q3 2022.
-
 ## App Screenshots
 |![SC03](gh_assets/sc04.png)|![SC04](gh_assets/sc06.png)|
 |---|---|
